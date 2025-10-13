@@ -166,22 +166,17 @@
             border: 2px solid rgba(100, 116, 139, 0.5);
             border-radius: 12px;
             padding: 20px;
-            cursor: pointer;
             transition: all 0.3s;
-        }
-
-        .tier-card:hover {
-            border-color: rgba(100, 116, 139, 0.8);
+            cursor: default;
         }
 
         .tier-card.active {
-            border-color: #3b82f6;
-            background: rgba(59, 130, 246, 0.1);
-        }
-
-        .tier-card.active.free {
             border-color: #22c55e;
             background: rgba(34, 197, 94, 0.1);
+        }
+
+        .tier-card.disabled {
+            opacity: 0.5;
         }
 
         .tier-price {
@@ -296,16 +291,8 @@
             padding: 20px;
             border-radius: 12px;
             margin: 20px 0;
-        }
-
-        .cost-display.free {
             background: rgba(34, 197, 94, 0.2);
             border: 1px solid rgba(34, 197, 94, 0.5);
-        }
-
-        .cost-display.paid {
-            background: rgba(59, 130, 246, 0.2);
-            border: 1px solid rgba(59, 130, 246, 0.5);
         }
 
         .cost-amount {
@@ -451,8 +438,6 @@
                     <span>Connect to Render Account</span>
                 </button>
             </div>
-
-
         </div>
 
         <!-- Step 2: Configuration -->
@@ -476,7 +461,7 @@
             <div class="grid-2">
                 <div class="form-group">
                     <label class="form-label">Application Name *</label>
-                    <input type="text" id="app-name" class="form-input" placeholder="dhis2-health" value="dhis2-health">
+                    <input type="text" id="app-name" class="form-input" placeholder="dhis2-health" value="dhis2-health" onkeyup="updateUrlPreview()">
                     <p class="form-hint">Lowercase, numbers, hyphens only</p>
                 </div>
                 <div class="form-group">
@@ -490,19 +475,26 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="form-label">Your DHIS2 URL Preview</label>
+                <div style="background: rgba(30, 41, 59, 0.8); padding: 12px; border-radius: 8px; border: 1px solid rgba(100, 116, 139, 0.5);">
+                    <code id="url-preview" style="color: #3b82f6; font-size: 0.95rem;">https://dhis2-health.onrender.com</code>
+                </div>
+            </div>
+
             <h3 style="margin: 40px 0 20px;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
                     <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
                     <line x1="1" y1="10" x2="23" y2="10"></line>
                 </svg>
-                Resource Plan
+                Resource Plan (Free Tier Only)
             </h3>
             
             <div class="tier-grid">
-                <div class="tier-card active free" onclick="selectTier('free')" id="tier-free">
+                <div class="tier-card active" id="tier-free">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h4>Free Tier</h4>
-                        <span id="check-free">✅</span>
+                        <span>✅</span>
                     </div>
                     <div class="tier-price free">$0/mo</div>
                     <ul class="tier-features">
@@ -512,38 +504,38 @@
                         <li>• Perfect for testing</li>
                     </ul>
                 </div>
-                <div class="tier-card" onclick="selectTier('starter')" id="tier-starter">
+                <div class="tier-card disabled" id="tier-starter">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h4>Starter</h4>
-                        <span id="check-starter" style="display: none;">✅</span>
+                        <span style="opacity: 0.3;">🔒</span>
                     </div>
                     <div class="tier-price paid">$14/mo</div>
                     <ul class="tier-features">
                         <li>• 512MB RAM</li>
                         <li>• 1GB Storage</li>
                         <li>• Always on</li>
-                        <li>• Small deployments</li>
+                        <li>• Upgrade from dashboard</li>
                     </ul>
                 </div>
-                <div class="tier-card" onclick="selectTier('production')" id="tier-production">
+                <div class="tier-card disabled" id="tier-production">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h4>Production</h4>
-                        <span id="check-production" style="display: none;">✅</span>
+                        <span style="opacity: 0.3;">🔒</span>
                     </div>
                     <div class="tier-price paid">$50/mo</div>
                     <ul class="tier-features">
                         <li>• 2GB RAM</li>
                         <li>• 10GB Storage</li>
                         <li>• High performance</li>
-                        <li>• 50-200 users</li>
+                        <li>• Upgrade from dashboard</li>
                     </ul>
                 </div>
             </div>
 
-            <div class="info-box" id="tier-note">
+            <div class="info-box">
                 <p style="font-size: 0.95rem;">
-                    <strong>Note:</strong> Your app will spin down after 15 minutes of inactivity. 
-                    First request after spin-down takes 30-60 seconds. Upgrade to Starter ($14/mo) for always-on service.
+                    <strong>Note:</strong> Starting with free tier. Your app will spin down after 15 minutes of inactivity. 
+                    First request after spin-down takes 30-60 seconds. Upgrade to paid plans anytime from your Render dashboard.
                 </p>
             </div>
 
@@ -581,11 +573,6 @@
             </h3>
             
             <div class="form-group">
-                <label class="form-label">Custom Domain</label>
-                <input type="text" id="custom-domain" class="form-input" placeholder="https://dhis2.yourcompany.com (optional)">
-            </div>
-
-            <div class="form-group">
                 <label class="form-label">Region</label>
                 <select id="region" class="form-select">
                     <option value="oregon">Oregon, USA</option>
@@ -595,7 +582,7 @@
                 </select>
             </div>
 
-            <div class="cost-display free" id="cost-display">
+            <div class="cost-display">
                 <h4>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
                         <line x1="12" y1="1" x2="12" y2="23"></line>
@@ -603,8 +590,8 @@
                     </svg>
                     Monthly Cost
                 </h4>
-                <div class="cost-amount" id="cost-amount">FREE</div>
-                <p style="color: #94a3b8; font-size: 0.95rem;" id="cost-note">
+                <div class="cost-amount">FREE</div>
+                <p style="color: #94a3b8; font-size: 0.95rem;">
                     You can upgrade to paid plans anytime from the Render dashboard
                 </p>
             </div>
@@ -688,22 +675,21 @@
             <div class="info-box success">
                 <h4 style="margin-bottom: 15px;">What's Been Set Up</h4>
                 <ul class="checklist">
-                    <li>DHIS2 <span id="final-version"></span> deployed</li>
-                    <li>PostgreSQL 15 database with PostGIS</li>
-                    <li>SSL certificate configured</li>
-                    <li><span id="tier-status"></span></li>
-                    <li>Custom admin password set</li>
-                    <li>Encryption configured</li>
+                    <li>✓ DHIS2 <span id="final-version"></span> deployed</li>
+                    <li>✓ PostgreSQL 15 database with PostGIS</li>
+                    <li>✓ SSL certificate configured</li>
+                    <li>✓ Free tier deployment (512MB RAM, 1GB storage)</li>
+                    <li>✓ Encryption configured</li>
                 </ul>
             </div>
 
-            <div class="info-box warning" id="free-tier-reminder" style="display: none;">
-                <h4 style="margin-bottom: 15px; color: #fbbf24;">Free Tier Notes</h4>
+            <div class="info-box warning">
+                <h4 style="margin-bottom: 15px; color: #fbbf24;">Free Tier Information</h4>
                 <ul class="checklist">
                     <li>• App spins down after 15 minutes of inactivity</li>
                     <li>• First request after spin-down takes 30-60 seconds</li>
-                    <li>• Upgrade to Starter ($14/mo) for always-on service</li>
-                    <li>• Upgrade from Render dashboard anytime</li>
+                    <li>• 512MB RAM, 1GB Storage</li>
+                    <li>• Perfect for testing and development</li>
                 </ul>
             </div>
 
@@ -711,6 +697,7 @@
                 <h4 style="margin-bottom: 15px;">Next Steps</h4>
                 <ol style="color: #cbd5e1; padding-left: 20px;">
                     <li style="margin: 5px 0;">Login to your DHIS2 instance</li>
+                    <li style="margin: 5px 0;">Change your admin password immediately</li>
                     <li style="margin: 5px 0;">Set up organization units</li>
                     <li style="margin: 5px 0;">Create user roles and accounts</li>
                     <li style="margin: 5px 0;">Configure data elements</li>
@@ -719,11 +706,8 @@
             </div>
 
             <div class="grid-2" style="margin-top: 30px;">
-                <button class="btn-secondary" style="width: 100%;" onclick="window.open('https://docs.dhis2.org', '_blank')">
+                <button class="btn-secondary" style="width: 100%; grid-column: 1 / -1;" onclick="window.open('https://docs.dhis2.org', '_blank')">
                     View Documentation
-                </button>
-                <button class="btn-secondary" style="width: 100%;" onclick="window.open('https://dashboard.render.com', '_blank')">
-                    Render Dashboard
                 </button>
             </div>
         </div>
@@ -731,17 +715,12 @@
         <!-- Footer -->
         <div class="footer">
             <p>Powered by Render • DHIS2 • PostgreSQL 15</p>
-            <p style="margin-top: 10px;" id="footer-cost">Using Free Tier • Upgrade anytime</p>
+            <p style="margin-top: 10px;">Free Deployment • No Credit Card Required</p>
         </div>
     </div>
 
     <script>
         // Configuration
-        const RENDER_CREDENTIALS = {
-            email: 'sillahkanuseries@gmail.com',
-            password: 'SajeedIslam@2025'
-        };
-
         let appConfig = {
             renderApiKey: '',
             appName: 'dhis2-health',
@@ -749,22 +728,19 @@
             dbPlan: 'free',
             webPlan: 'free',
             region: 'oregon',
-            customDomain: '',
-            adminPassword: 'district', // Default DHIS2 password
+            adminPassword: 'district',
             encryptionKey: '',
             dbName: 'dhis2',
             dbUser: 'dhis'
         };
 
-        let selectedTier = 'free';
-
-        // Connect to Render
+        // Connect to Render (Simulated)
         async function connectToRender() {
             const btn = document.getElementById('connect-btn');
             btn.disabled = true;
             btn.innerHTML = '<div class="spinner"></div> Connecting to Render...';
 
-            // Simulate API connection (2 seconds)
+            // Simulate API connection
             await new Promise(resolve => setTimeout(resolve, 2000));
 
             // Generate mock API key
@@ -812,72 +788,11 @@
             appConfig.encryptionKey = key;
         }
 
-        // Select tier
-        function selectTier(tier) {
-            selectedTier = tier;
-            
-            // Update UI
-            document.querySelectorAll('.tier-card').forEach(card => {
-                card.classList.remove('active', 'free');
-            });
-            
-            document.querySelectorAll('[id^="check-"]').forEach(check => {
-                check.style.display = 'none';
-            });
-
-            const tierCard = document.getElementById(`tier-${tier}`);
-            tierCard.classList.add('active');
-            document.getElementById(`check-${tier}`).style.display = 'block';
-
-            if (tier === 'free') {
-                tierCard.classList.add('free');
-                appConfig.dbPlan = 'free';
-                appConfig.webPlan = 'free';
-                document.getElementById('tier-note').style.display = 'block';
-            } else {
-                document.getElementById('tier-note').style.display = 'none';
-                if (tier === 'starter') {
-                    appConfig.dbPlan = 'standard';
-                    appConfig.webPlan = 'starter';
-                } else {
-                    appConfig.dbPlan = 'pro';
-                    appConfig.webPlan = 'standard';
-                }
-            }
-
-            updateCostDisplay();
-        }
-
-        // Update cost display
-        function updateCostDisplay() {
-            const costDisplay = document.getElementById('cost-display');
-            const costAmount = document.getElementById('cost-amount');
-            const costNote = document.getElementById('cost-note');
-
-            if (selectedTier === 'free') {
-                costDisplay.className = 'cost-display free';
-                costAmount.textContent = 'FREE';
-                costAmount.style.color = '#22c55e';
-                costNote.textContent = 'You can upgrade to paid plans anytime from the Render dashboard';
-            } else {
-                costDisplay.className = 'cost-display paid';
-                costAmount.style.color = '#3b82f6';
-                if (selectedTier === 'starter') {
-                    costAmount.textContent = '$14/mo';
-                    costNote.textContent = 'Database: $7 + Web Service: $7';
-                } else {
-                    costAmount.textContent = '$50/mo';
-                    costNote.textContent = 'Database: $25 + Web Service: $25';
-                }
-            }
-        }
-
         // Start deployment
         async function startDeployment() {
             // Get values
             appConfig.appName = document.getElementById('app-name').value;
             appConfig.dhis2Version = document.getElementById('dhis2-version').value;
-            appConfig.customDomain = document.getElementById('custom-domain').value;
             appConfig.region = document.getElementById('region').value;
 
             // Validate
@@ -886,11 +801,16 @@
                 return;
             }
 
+            if (!appConfig.encryptionKey) {
+                alert('Please generate an encryption key');
+                return;
+            }
+
             // Hide config, show deploying
             document.getElementById('step-config').classList.add('step-hidden');
             document.getElementById('step-deploying').classList.remove('step-hidden');
 
-            // Run deployment
+            // Run deployment simulation
             await runDeployment();
         }
 
@@ -937,7 +857,7 @@
 
         // Show complete screen
         function showComplete() {
-            const deploymentUrl = appConfig.customDomain || `https://${appConfig.appName}.onrender.com`;
+            const deploymentUrl = `https://${appConfig.appName}.onrender.com`;
             
             document.getElementById('step-deploying').classList.add('step-hidden');
             document.getElementById('step-complete').classList.remove('step-hidden');
@@ -945,15 +865,6 @@
             document.getElementById('deployment-url').value = deploymentUrl;
             document.getElementById('final-password').textContent = appConfig.adminPassword;
             document.getElementById('final-version').textContent = appConfig.dhis2Version;
-
-            if (selectedTier === 'free') {
-                document.getElementById('tier-status').textContent = 'Free tier (upgrade anytime)';
-                document.getElementById('free-tier-reminder').style.display = 'block';
-                document.getElementById('footer-cost').textContent = 'Using Free Tier • Upgrade anytime';
-            } else {
-                document.getElementById('tier-status').textContent = 'Automatic backups enabled';
-                document.getElementById('footer-cost').textContent = `${selectedTier === 'starter' ? '$14/month' : '$50/month'} Plan`;
-            }
 
             // Show popup with credentials
             setTimeout(() => {
@@ -1075,6 +986,10 @@
                         opacity: 1;
                     }
                 }
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.5; }
+                }
             `;
             document.head.appendChild(style);
         }
@@ -1095,9 +1010,16 @@
             return result;
         }
 
+        // Update URL preview
+        function updateUrlPreview() {
+            const appName = document.getElementById('app-name').value || 'dhis2-health';
+            const cleanName = appName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+            document.getElementById('url-preview').textContent = `https://${cleanName}.onrender.com`;
+        }
+
         // Initialize
         generateEncryptionKey();
-        updateCostDisplay();
+        updateUrlPreview();
     </script>
 </body>
 </html>
