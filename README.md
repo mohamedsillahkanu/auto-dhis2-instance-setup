@@ -1,0 +1,1 @@
+# auto-dhis2-instance-setup
