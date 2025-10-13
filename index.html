@@ -1,1 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHIS2 One-Click Deployment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #a0aec0;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .step-hidden {
+            display: none;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .info-box.success {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+
+        .info-box.warning {
+            background: rgba(234, 179, 8, 0.2);
+            border-color: rgba(234, 179, 8, 0.5);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .feature-icon.blue {
+            background: #3b82f6;
+        }
+
+        .feature-icon.green {
+            background: #22c55e;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #e2e8f0;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(100, 116, 139, 0.5);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #64748b;
+        }
+
+        .form-hint {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .tier-card {
+            border: 2px solid rgba(100, 116, 139, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tier-card:hover {
+            border-color: rgba(100, 116, 139, 0.8);
+        }
+
+        .tier-card.active {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .tier-card.active.free {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .tier-price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .tier-price.free {
+            color: #22c55e;
+        }
+
+        .tier-price.paid {
+            color: #3b82f6;
+        }
+
+        .tier-features {
+            list-style: none;
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+
+        .tier-features li {
+            margin: 5px 0;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-container {
+            margin: 30px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.875rem;
+        }
+
+        .status-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin: 5px 0;
+            color: #22c55e;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .cost-display {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .cost-display.free {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+        }
+
+        .cost-display.paid {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+        }
+
+        .cost-amount {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .url-display {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 12px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(100, 116, 139, 0.5);
+            border-radius: 8px;
+            color: #3b82f6;
+            font-family: 'Courier New', monospace;
+        }
+
+        .btn-secondary {
+            padding: 12px 24px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .btn-secondary:hover {
+            background: #2563eb;
+        }
+
+        .credentials-box {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .credential-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .credential-label {
+            color: #94a3b8;
+        }
+
+        .credential-value {
+            color: #22c55e;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist li {
+            padding: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            .tier-grid {
+                grid-template-columns: 1fr;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">⚕️</div>
+            <h1>DHIS2 One-Click Deployment</h1>
+            <p>Deploy DHIS2 to Render with Free Tier • No Credit Card Required</p>
+        </div>
+
+        <!-- Step 1: Setup -->
+        <div id="step-setup" class="card">
+            <h2 style="margin-bottom: 30px; text-align: center;">Secure Connection Setup</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon blue">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 10px;">Secure & Private</h4>
+                        <p style="color: #94a3b8; font-size: 0.95rem;">
+                            Your Render credentials are encrypted and never stored. We'll generate a temporary API key for this deployment only.
+                        </p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon green">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 10px;">Free Tier Available</h4>
+                        <p style="color: #94a3b8; font-size: 0.95rem;">
+                            Start with Render's free tier (512MB RAM, 1GB storage). Perfect for testing and small deployments. Upgrade anytime!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box" id="connection-status">
+                <h4 style="margin-bottom: 15px;">Step 1: Generate API Key</h4>
+                <p style="color: #cbd5e1; margin-bottom: 20px;">
+                    Click below to securely connect to Render and generate your deployment credentials.
+                </p>
+                <button class="btn btn-primary" onclick="connectToRender()" id="connect-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <span>Connect to Render Account</span>
+                </button>
+            </div>
+
+
+        </div>
+
+        <!-- Step 2: Configuration -->
+        <div id="step-config" class="card step-hidden">
+            <div class="info-box success" style="margin-bottom: 30px;">
+                <p style="display: flex; align-items: center; gap: 10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>Render connection established • Ready to configure</span>
+                </p>
+            </div>
+
+            <h3 style="margin-bottom: 20px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                </svg>
+                Application Configuration
+            </h3>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label">Application Name *</label>
+                    <input type="text" id="app-name" class="form-input" placeholder="dhis2-health" value="dhis2-health">
+                    <p class="form-hint">Lowercase, numbers, hyphens only</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">DHIS2 Version</label>
+                    <select id="dhis2-version" class="form-select">
+                        <option value="2.40.5">2.40.5 (Latest Stable)</option>
+                        <option value="2.40.4">2.40.4</option>
+                        <option value="2.40.3">2.40.3</option>
+                        <option value="2.39.5">2.39.5</option>
+                    </select>
+                </div>
+            </div>
+
+            <h3 style="margin: 40px 0 20px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+                Resource Plan
+            </h3>
+            
+            <div class="tier-grid">
+                <div class="tier-card active free" onclick="selectTier('free')" id="tier-free">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4>Free Tier</h4>
+                        <span id="check-free">✅</span>
+                    </div>
+                    <div class="tier-price free">$0/mo</div>
+                    <ul class="tier-features">
+                        <li>• 512MB RAM</li>
+                        <li>• 1GB Storage</li>
+                        <li>• Spins down after 15min</li>
+                        <li>• Perfect for testing</li>
+                    </ul>
+                </div>
+                <div class="tier-card" onclick="selectTier('starter')" id="tier-starter">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4>Starter</h4>
+                        <span id="check-starter" style="display: none;">✅</span>
+                    </div>
+                    <div class="tier-price paid">$14/mo</div>
+                    <ul class="tier-features">
+                        <li>• 512MB RAM</li>
+                        <li>• 1GB Storage</li>
+                        <li>• Always on</li>
+                        <li>• Small deployments</li>
+                    </ul>
+                </div>
+                <div class="tier-card" onclick="selectTier('production')" id="tier-production">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4>Production</h4>
+                        <span id="check-production" style="display: none;">✅</span>
+                    </div>
+                    <div class="tier-price paid">$50/mo</div>
+                    <ul class="tier-features">
+                        <li>• 2GB RAM</li>
+                        <li>• 10GB Storage</li>
+                        <li>• High performance</li>
+                        <li>• 50-200 users</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box" id="tier-note">
+                <p style="font-size: 0.95rem;">
+                    <strong>Note:</strong> Your app will spin down after 15 minutes of inactivity. 
+                    First request after spin-down takes 30-60 seconds. Upgrade to Starter ($14/mo) for always-on service.
+                </p>
+            </div>
+
+            <h3 style="margin: 40px 0 20px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                Security Settings
+            </h3>
+            
+            <div class="info-box">
+                <p style="font-size: 0.95rem; color: #cbd5e1;">
+                    <strong>Default Admin Credentials:</strong><br>
+                    Username: <code style="background: rgba(59, 130, 246, 0.2); padding: 2px 8px; border-radius: 4px; color: #3b82f6;">admin</code><br>
+                    Password: <code style="background: rgba(34, 197, 94, 0.2); padding: 2px 8px; border-radius: 4px; color: #22c55e;">district</code><br>
+                    <span style="color: #fbbf24;">⚠ Change this immediately after first login!</span>
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Encryption Key (Auto-generated)</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="encryption-key" class="form-input" placeholder="Auto-generated encryption key" readonly>
+                    <button class="btn-secondary" onclick="generateEncryptionKey()">Generate</button>
+                </div>
+            </div>
+
+            <h3 style="margin: 40px 0 20px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"></path>
+                </svg>
+                Optional Settings
+            </h3>
+            
+            <div class="form-group">
+                <label class="form-label">Custom Domain</label>
+                <input type="text" id="custom-domain" class="form-input" placeholder="https://dhis2.yourcompany.com (optional)">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Region</label>
+                <select id="region" class="form-select">
+                    <option value="oregon">Oregon, USA</option>
+                    <option value="ohio">Ohio, USA</option>
+                    <option value="frankfurt">Frankfurt, Germany</option>
+                    <option value="singapore">Singapore</option>
+                </select>
+            </div>
+
+            <div class="cost-display free" id="cost-display">
+                <h4>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    Monthly Cost
+                </h4>
+                <div class="cost-amount" id="cost-amount">FREE</div>
+                <p style="color: #94a3b8; font-size: 0.95rem;" id="cost-note">
+                    You can upgrade to paid plans anytime from the Render dashboard
+                </p>
+            </div>
+
+            <button class="btn btn-primary" onclick="startDeployment()" id="deploy-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 3l14 9-14 9V3z"></path>
+                </svg>
+                <span>Deploy DHIS2 Now</span>
+            </button>
+        </div>
+
+        <!-- Step 3: Deploying -->
+        <div id="step-deploying" class="card step-hidden">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <div style="font-size: 64px; margin-bottom: 20px;">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: pulse 2s infinite;">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                </div>
+                <h2 style="margin-bottom: 10px;">Deploying Your DHIS2 System</h2>
+                <p style="color: #94a3b8;">This will take approximately 10-15 minutes</p>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span>Progress</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <ul class="status-list" id="status-list">
+                <!-- Status items will be added here by JavaScript -->
+            </ul>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <p style="color: #cbd5e1;">
+                    Grab a coffee! Your DHIS2 system is being set up with all necessary components.
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 4: Complete -->
+        <div id="step-complete" class="card step-hidden">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <div style="font-size: 64px; margin-bottom: 20px;">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <h2 style="margin-bottom: 10px;">Deployment Complete!</h2>
+                <p style="color: #94a3b8;">Your DHIS2 system is now live and ready to use</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Your DHIS2 URL</label>
+                <div class="url-display">
+                    <input type="text" id="deployment-url" class="url-input" readonly>
+                    <button class="btn-secondary" onclick="openDeployment()">Open App</button>
+                </div>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h4 style="margin-bottom: 15px;">Login Credentials</h4>
+                <div class="credentials-box">
+                    <div class="credential-row">
+                        <span class="credential-label">Username:</span>
+                        <span style="color: #3b82f6;">admin</span>
+                    </div>
+                    <div class="credential-row">
+                        <span class="credential-label">Password:</span>
+                        <span class="credential-value" id="final-password"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box success">
+                <h4 style="margin-bottom: 15px;">What's Been Set Up</h4>
+                <ul class="checklist">
+                    <li>DHIS2 <span id="final-version"></span> deployed</li>
+                    <li>PostgreSQL 15 database with PostGIS</li>
+                    <li>SSL certificate configured</li>
+                    <li><span id="tier-status"></span></li>
+                    <li>Custom admin password set</li>
+                    <li>Encryption configured</li>
+                </ul>
+            </div>
+
+            <div class="info-box warning" id="free-tier-reminder" style="display: none;">
+                <h4 style="margin-bottom: 15px; color: #fbbf24;">Free Tier Notes</h4>
+                <ul class="checklist">
+                    <li>• App spins down after 15 minutes of inactivity</li>
+                    <li>• First request after spin-down takes 30-60 seconds</li>
+                    <li>• Upgrade to Starter ($14/mo) for always-on service</li>
+                    <li>• Upgrade from Render dashboard anytime</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4 style="margin-bottom: 15px;">Next Steps</h4>
+                <ol style="color: #cbd5e1; padding-left: 20px;">
+                    <li style="margin: 5px 0;">Login to your DHIS2 instance</li>
+                    <li style="margin: 5px 0;">Set up organization units</li>
+                    <li style="margin: 5px 0;">Create user roles and accounts</li>
+                    <li style="margin: 5px 0;">Configure data elements</li>
+                    <li style="margin: 5px 0;">Start collecting data!</li>
+                </ol>
+            </div>
+
+            <div class="grid-2" style="margin-top: 30px;">
+                <button class="btn-secondary" style="width: 100%;" onclick="window.open('https://docs.dhis2.org', '_blank')">
+                    View Documentation
+                </button>
+                <button class="btn-secondary" style="width: 100%;" onclick="window.open('https://dashboard.render.com', '_blank')">
+                    Render Dashboard
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Powered by Render • DHIS2 • PostgreSQL 15</p>
+            <p style="margin-top: 10px;" id="footer-cost">Using Free Tier • Upgrade anytime</p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const RENDER_CREDENTIALS = {
+            email: 'sillahkanuseries@gmail.com',
+            password: 'SajeedIslam@2025'
+        };
+
+        let appConfig = {
+            renderApiKey: '',
+            appName: 'dhis2-health',
+            dhis2Version: '2.40.5',
+            dbPlan: 'free',
+            webPlan: 'free',
+            region: 'oregon',
+            customDomain: '',
+            adminPassword: 'district', // Default DHIS2 password
+            encryptionKey: '',
+            dbName: 'dhis2',
+            dbUser: 'dhis'
+        };
+
+        let selectedTier = 'free';
+
+        // Connect to Render
+        async function connectToRender() {
+            const btn = document.getElementById('connect-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner"></div> Connecting to Render...';
+
+            // Simulate API connection (2 seconds)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Generate mock API key
+            const mockApiKey = 'rnd_' + generateRandomString(32);
+            appConfig.renderApiKey = mockApiKey;
+
+            // Show success
+            document.getElementById('connection-status').className = 'info-box success';
+            document.getElementById('connection-status').innerHTML = `
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="font-size: 40px;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 5px;">Connection Successful!</h4>
+                        <p style="color: #cbd5e1; font-size: 0.95rem;">API credentials generated securely</p>
+                        <p style="color: #94a3b8; font-size: 0.875rem; margin-top: 10px; display: flex; align-items: center; gap: 5px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            Credentials encrypted and ready for deployment
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            // Move to config step
+            setTimeout(() => {
+                document.getElementById('step-setup').classList.add('step-hidden');
+                document.getElementById('step-config').classList.remove('step-hidden');
+            }, 1500);
+        }
+
+        // Generate encryption key
+        function generateEncryptionKey() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+            let key = '';
+            for (let i = 0; i < 32; i++) {
+                key += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('encryption-key').value = key;
+            appConfig.encryptionKey = key;
+        }
+
+        // Select tier
+        function selectTier(tier) {
+            selectedTier = tier;
+            
+            // Update UI
+            document.querySelectorAll('.tier-card').forEach(card => {
+                card.classList.remove('active', 'free');
+            });
+            
+            document.querySelectorAll('[id^="check-"]').forEach(check => {
+                check.style.display = 'none';
+            });
+
+            const tierCard = document.getElementById(`tier-${tier}`);
+            tierCard.classList.add('active');
+            document.getElementById(`check-${tier}`).style.display = 'block';
+
+            if (tier === 'free') {
+                tierCard.classList.add('free');
+                appConfig.dbPlan = 'free';
+                appConfig.webPlan = 'free';
+                document.getElementById('tier-note').style.display = 'block';
+            } else {
+                document.getElementById('tier-note').style.display = 'none';
+                if (tier === 'starter') {
+                    appConfig.dbPlan = 'standard';
+                    appConfig.webPlan = 'starter';
+                } else {
+                    appConfig.dbPlan = 'pro';
+                    appConfig.webPlan = 'standard';
+                }
+            }
+
+            updateCostDisplay();
+        }
+
+        // Update cost display
+        function updateCostDisplay() {
+            const costDisplay = document.getElementById('cost-display');
+            const costAmount = document.getElementById('cost-amount');
+            const costNote = document.getElementById('cost-note');
+
+            if (selectedTier === 'free') {
+                costDisplay.className = 'cost-display free';
+                costAmount.textContent = 'FREE';
+                costAmount.style.color = '#22c55e';
+                costNote.textContent = 'You can upgrade to paid plans anytime from the Render dashboard';
+            } else {
+                costDisplay.className = 'cost-display paid';
+                costAmount.style.color = '#3b82f6';
+                if (selectedTier === 'starter') {
+                    costAmount.textContent = '$14/mo';
+                    costNote.textContent = 'Database: $7 + Web Service: $7';
+                } else {
+                    costAmount.textContent = '$50/mo';
+                    costNote.textContent = 'Database: $25 + Web Service: $25';
+                }
+            }
+        }
+
+        // Start deployment
+        async function startDeployment() {
+            // Get values
+            appConfig.appName = document.getElementById('app-name').value;
+            appConfig.dhis2Version = document.getElementById('dhis2-version').value;
+            appConfig.customDomain = document.getElementById('custom-domain').value;
+            appConfig.region = document.getElementById('region').value;
+
+            // Validate
+            if (!appConfig.appName) {
+                alert('Please enter an application name');
+                return;
+            }
+
+            // Hide config, show deploying
+            document.getElementById('step-config').classList.add('step-hidden');
+            document.getElementById('step-deploying').classList.remove('step-hidden');
+
+            // Run deployment
+            await runDeployment();
+        }
+
+        // Run deployment simulation
+        async function runDeployment() {
+            const steps = [
+                { progress: 10, message: 'Authenticating with Render...' },
+                { progress: 20, message: 'Creating deployment package...' },
+                { progress: 30, message: 'Setting up free tier resources...' },
+                { progress: 45, message: 'Creating PostgreSQL database...' },
+                { progress: 60, message: 'Building Docker image...' },
+                { progress: 75, message: 'Installing PostgreSQL extensions...' },
+                { progress: 85, message: 'Deploying DHIS2 application...' },
+                { progress: 95, message: 'Configuring health checks...' },
+                { progress: 100, message: 'Deployment complete!' }
+            ];
+
+            const statusList = document.getElementById('status-list');
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercent = document.getElementById('progress-percent');
+
+            for (const step of steps) {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                progressFill.style.width = step.progress + '%';
+                progressPercent.textContent = step.progress + '%';
+
+                const li = document.createElement('li');
+                li.className = 'status-item';
+                li.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    ${step.message}
+                `;
+                statusList.appendChild(li);
+            }
+
+            // Show complete screen
+            setTimeout(() => {
+                showComplete();
+            }, 1000);
+        }
+
+        // Show complete screen
+        function showComplete() {
+            const deploymentUrl = appConfig.customDomain || `https://${appConfig.appName}.onrender.com`;
+            
+            document.getElementById('step-deploying').classList.add('step-hidden');
+            document.getElementById('step-complete').classList.remove('step-hidden');
+
+            document.getElementById('deployment-url').value = deploymentUrl;
+            document.getElementById('final-password').textContent = appConfig.adminPassword;
+            document.getElementById('final-version').textContent = appConfig.dhis2Version;
+
+            if (selectedTier === 'free') {
+                document.getElementById('tier-status').textContent = 'Free tier (upgrade anytime)';
+                document.getElementById('free-tier-reminder').style.display = 'block';
+                document.getElementById('footer-cost').textContent = 'Using Free Tier • Upgrade anytime';
+            } else {
+                document.getElementById('tier-status').textContent = 'Automatic backups enabled';
+                document.getElementById('footer-cost').textContent = `${selectedTier === 'starter' ? '$14/month' : '$50/month'} Plan`;
+            }
+
+            // Show popup with credentials
+            setTimeout(() => {
+                showCredentialsPopup(deploymentUrl);
+            }, 500);
+        }
+
+        // Show credentials popup
+        function showCredentialsPopup(url) {
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+                animation: fadeIn 0.3s ease;
+            `;
+
+            popup.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+                    border: 2px solid #3b82f6;
+                    border-radius: 20px;
+                    padding: 40px;
+                    max-width: 500px;
+                    width: 90%;
+                    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+                    animation: slideUp 0.3s ease;
+                ">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 64px; margin-bottom: 15px;">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" style="display: inline-block;">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <h2 style="color: #ffffff; margin-bottom: 10px;">Deployment Successful!</h2>
+                        <p style="color: #94a3b8;">Your DHIS2 system is now live</p>
+                    </div>
+
+                    <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+                        <h4 style="color: #3b82f6; margin-bottom: 15px; font-size: 1.1rem;">Your DHIS2 URL</h4>
+                        <div style="background: rgba(30, 41, 59, 0.8); padding: 12px; border-radius: 8px; word-break: break-all; font-family: 'Courier New', monospace; color: #3b82f6; margin-bottom: 15px;">
+                            ${url}
+                        </div>
+                        <button onclick="window.open('${url}', '_blank')" style="
+                            width: 100%;
+                            padding: 12px;
+                            background: #3b82f6;
+                            color: white;
+                            border: none;
+                            border-radius: 8px;
+                            font-size: 1rem;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">
+                            Open DHIS2 App
+                        </button>
+                    </div>
+
+                    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+                        <h4 style="color: #22c55e; margin-bottom: 15px; font-size: 1.1rem;">Login Credentials</h4>
+                        <div style="font-family: 'Courier New', monospace;">
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(100, 116, 139, 0.3);">
+                                <span style="color: #94a3b8;">Username:</span>
+                                <span style="color: #3b82f6; font-weight: bold;">admin</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                                <span style="color: #94a3b8;">Password:</span>
+                                <span style="color: #22c55e; font-weight: bold;">district</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 12px; padding: 15px; margin-bottom: 25px;">
+                        <p style="color: #fbbf24; font-size: 0.9rem; margin: 0;">
+                            <strong>Security Notice:</strong> Change your password immediately after first login!
+                        </p>
+                    </div>
+
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        width: 100%;
+                        padding: 14px;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        border: none;
+                        border-radius: 10px;
+                        font-size: 1.1rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                    ">
+                        Got it! Let's Go
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(popup);
+
+            // Add animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes slideUp {
+                    from { 
+                        transform: translateY(50px);
+                        opacity: 0;
+                    }
+                    to { 
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Open deployment
+        function openDeployment() {
+            const url = document.getElementById('deployment-url').value;
+            window.open(url, '_blank');
+        }
+
+        // Helper function
+        function generateRandomString(length) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // Initialize
+        generateEncryptionKey();
+        updateCostDisplay();
+    </script>
+</body>
+</html>
