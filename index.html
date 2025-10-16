@@ -155,54 +155,6 @@
             gap: 15px;
         }
 
-        .tier-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .tier-card {
-            border: 2px solid rgba(100, 116, 139, 0.5);
-            border-radius: 12px;
-            padding: 20px;
-            transition: all 0.3s;
-            cursor: default;
-        }
-
-        .tier-card.active {
-            border-color: #22c55e;
-            background: rgba(34, 197, 94, 0.1);
-        }
-
-        .tier-card.disabled {
-            opacity: 0.5;
-        }
-
-        .tier-price {
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .tier-price.free {
-            color: #22c55e;
-        }
-
-        .tier-price.paid {
-            color: #3b82f6;
-        }
-
-        .tier-features {
-            list-style: none;
-            font-size: 0.875rem;
-            color: #94a3b8;
-        }
-
-        .tier-features li {
-            margin: 5px 0;
-        }
-
         .btn {
             width: 100%;
             padding: 16px 24px;
@@ -233,90 +185,6 @@
             cursor: not-allowed;
         }
 
-        .progress-container {
-            margin: 30px 0;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 12px;
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            transition: width 0.5s ease;
-            width: 0%;
-        }
-
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 0.875rem;
-        }
-
-        .status-list {
-            list-style: none;
-            margin-top: 20px;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            margin: 5px 0;
-            color: #22c55e;
-        }
-
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ffffff;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .cost-display {
-            text-align: center;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            background: rgba(34, 197, 94, 0.2);
-            border: 1px solid rgba(34, 197, 94, 0.5);
-        }
-
-        .cost-amount {
-            font-size: 3rem;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .url-display {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .url-input {
-            flex: 1;
-            padding: 12px;
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(100, 116, 139, 0.5);
-            border-radius: 8px;
-            color: #3b82f6;
-            font-family: 'Courier New', monospace;
-        }
-
         .btn-secondary {
             padding: 12px 24px;
             background: #3b82f6;
@@ -325,6 +193,7 @@
             border-radius: 8px;
             cursor: pointer;
             white-space: nowrap;
+            transition: all 0.3s;
         }
 
         .btn-secondary:hover {
@@ -360,24 +229,23 @@
             font-size: 0.875rem;
         }
 
-        .checklist {
-            list-style: none;
-        }
-
-        .checklist li {
-            padding: 5px 0;
-        }
-
         @media (max-width: 768px) {
-            .tier-grid {
-                grid-template-columns: 1fr;
-            }
             .grid-2 {
                 grid-template-columns: 1fr;
             }
             .header h1 {
                 font-size: 2rem;
             }
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
         }
     </style>
 </head>
@@ -392,7 +260,7 @@
 
         <!-- Step 1: Setup -->
         <div id="step-setup" class="card">
-            <h2 style="margin-bottom: 30px; text-align: center;">Secure Connection Setup</h2>
+            <h2 style="margin-bottom: 30px; text-align: center;">Quick Setup Guide</h2>
             
             <div class="feature-grid">
                 <div class="feature-item">
@@ -405,7 +273,7 @@
                     <div>
                         <h4 style="margin-bottom: 10px;">Secure & Private</h4>
                         <p style="color: #94a3b8; font-size: 0.95rem;">
-                            Your Render credentials are encrypted and never stored. We'll generate a temporary API key for this deployment only.
+                            Deploy directly to your own Render account. No middleman, complete control.
                         </p>
                     </div>
                 </div>
@@ -419,51 +287,50 @@
                     <div>
                         <h4 style="margin-bottom: 10px;">Free Tier Available</h4>
                         <p style="color: #94a3b8; font-size: 0.95rem;">
-                            Start with Render's free tier (512MB RAM, 1GB storage). Perfect for testing and small deployments. Upgrade anytime!
+                            Start with Render's free tier (512MB RAM, 1GB storage). Perfect for testing and small deployments.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <div class="info-box" id="connection-status">
-                <h4 style="margin-bottom: 15px;">Step 1: Generate API Key</h4>
-                <p style="color: #cbd5e1; margin-bottom: 20px;">
-                    Click below to securely connect to Render and generate your deployment credentials.
+            <div class="info-box">
+                <h4 style="margin-bottom: 15px;">Before You Begin</h4>
+                <p style="color: #cbd5e1; margin-bottom: 15px;">
+                    This tool will generate the exact configuration you need to deploy DHIS2 on Render. You'll need:
                 </p>
-                <button class="btn btn-primary" onclick="connectToRender()" id="connect-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                    </svg>
-                    <span>Connect to Render Account</span>
-                </button>
+                <ul style="color: #cbd5e1; padding-left: 20px; list-style: none;">
+                    <li style="margin: 8px 0;">✓ A free Render account (<a href="https://render.com/register" target="_blank" style="color: #3b82f6;">Sign up here</a>)</li>
+                    <li style="margin: 8px 0;">✓ 5-10 minutes to complete the setup</li>
+                    <li style="margin: 8px 0;">✓ No credit card required for free tier</li>
+                </ul>
             </div>
+
+            <button class="btn btn-primary" onclick="startConfiguration()" id="start-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 3l14 9-14 9V3z"></path>
+                </svg>
+                <span>Start Configuration</span>
+            </button>
         </div>
 
         <!-- Step 2: Configuration -->
         <div id="step-config" class="card step-hidden">
-            <div class="info-box success" style="margin-bottom: 30px;">
-                <p style="display: flex; align-items: center; gap: 10px;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Render connection established • Ready to configure</span>
-                </p>
-            </div>
+            <h2 style="margin-bottom: 30px; text-align: center;">Configure Your DHIS2 Deployment</h2>
 
             <h3 style="margin-bottom: 20px;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
                     <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
                 </svg>
-                Application Configuration
+                Application Details
             </h3>
             
+            <div class="form-group">
+                <label class="form-label">Application Name *</label>
+                <input type="text" id="app-name" class="form-input" placeholder="my-dhis2-app" value="dhis2-health">
+                <p class="form-hint">Lowercase letters, numbers, and hyphens only. This will be your app's URL.</p>
+            </div>
+
             <div class="grid-2">
-                <div class="form-group">
-                    <label class="form-label">Application Name *</label>
-                    <input type="text" id="app-name" class="form-input" placeholder="dhis2-health" value="dhis2-health" onkeyup="updateUrlPreview()">
-                    <p class="form-hint">Lowercase, numbers, hyphens only</p>
-                </div>
                 <div class="form-group">
                     <label class="form-label">DHIS2 Version</label>
                     <select id="dhis2-version" class="form-select">
@@ -473,70 +340,44 @@
                         <option value="2.39.5">2.39.5</option>
                     </select>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Your DHIS2 URL Preview</label>
-                <div style="background: rgba(30, 41, 59, 0.8); padding: 12px; border-radius: 8px; border: 1px solid rgba(100, 116, 139, 0.5);">
-                    <code id="url-preview" style="color: #3b82f6; font-size: 0.95rem;">https://dhis2-health.onrender.com</code>
+                <div class="form-group">
+                    <label class="form-label">Region</label>
+                    <select id="region" class="form-select">
+                        <option value="oregon">Oregon, USA</option>
+                        <option value="ohio">Ohio, USA</option>
+                        <option value="frankfurt">Frankfurt, Germany</option>
+                        <option value="singapore">Singapore</option>
+                    </select>
                 </div>
             </div>
 
             <h3 style="margin: 40px 0 20px;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
-                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                 </svg>
-                Resource Plan (Free Tier Only)
+                Database Configuration
             </h3>
-            
-            <div class="tier-grid">
-                <div class="tier-card active" id="tier-free">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h4>Free Tier</h4>
-                        <span>✅</span>
-                    </div>
-                    <div class="tier-price free">$0/mo</div>
-                    <ul class="tier-features">
-                        <li>• 512MB RAM</li>
-                        <li>• 1GB Storage</li>
-                        <li>• Spins down after 15min</li>
-                        <li>• Perfect for testing</li>
-                    </ul>
-                </div>
-                <div class="tier-card disabled" id="tier-starter">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h4>Starter</h4>
-                        <span style="opacity: 0.3;">🔒</span>
-                    </div>
-                    <div class="tier-price paid">$14/mo</div>
-                    <ul class="tier-features">
-                        <li>• 512MB RAM</li>
-                        <li>• 1GB Storage</li>
-                        <li>• Always on</li>
-                        <li>• Upgrade from dashboard</li>
-                    </ul>
-                </div>
-                <div class="tier-card disabled" id="tier-production">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h4>Production</h4>
-                        <span style="opacity: 0.3;">🔒</span>
-                    </div>
-                    <div class="tier-price paid">$50/mo</div>
-                    <ul class="tier-features">
-                        <li>• 2GB RAM</li>
-                        <li>• 10GB Storage</li>
-                        <li>• High performance</li>
-                        <li>• Upgrade from dashboard</li>
-                    </ul>
-                </div>
+
+            <div class="form-group">
+                <label class="form-label">Database Name *</label>
+                <input type="text" id="db-name" class="form-input" placeholder="dhis2_db" value="dhis2_db">
+                <p class="form-hint">Name for your PostgreSQL database</p>
             </div>
 
-            <div class="info-box">
-                <p style="font-size: 0.95rem;">
-                    <strong>Note:</strong> Starting with free tier. Your app will spin down after 15 minutes of inactivity. 
-                    First request after spin-down takes 30-60 seconds. Upgrade to paid plans anytime from your Render dashboard.
-                </p>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label">Database Username *</label>
+                    <input type="text" id="db-user" class="form-input" placeholder="dhis2_user" value="dhis2_user">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Database Password *</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="db-password" class="form-input" placeholder="Auto-generated" readonly>
+                        <button class="btn-secondary" onclick="generatePassword('db-password')">Generate</button>
+                    </div>
+                </div>
             </div>
 
             <h3 style="margin: 40px 0 20px;">
@@ -546,168 +387,239 @@
                 </svg>
                 Security Settings
             </h3>
-            
+
+            <div class="form-group">
+                <label class="form-label">Encryption Key *</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="encryption-key" class="form-input" placeholder="Auto-generated encryption key" readonly>
+                    <button class="btn-secondary" onclick="generatePassword('encryption-key')">Generate</button>
+                </div>
+                <p class="form-hint">32-character encryption key for securing sensitive data</p>
+            </div>
+
             <div class="info-box">
                 <p style="font-size: 0.95rem; color: #cbd5e1;">
                     <strong>Default Admin Credentials:</strong><br>
                     Username: <code style="background: rgba(59, 130, 246, 0.2); padding: 2px 8px; border-radius: 4px; color: #3b82f6;">admin</code><br>
                     Password: <code style="background: rgba(34, 197, 94, 0.2); padding: 2px 8px; border-radius: 4px; color: #22c55e;">district</code><br>
-                    <span style="color: #fbbf24;">⚠ Change this immediately after first login!</span>
+                    <span style="color: #fbbf24;">⚠️ Change this immediately after first login!</span>
                 </p>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Encryption Key (Auto-generated)</label>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="encryption-key" class="form-input" placeholder="Auto-generated encryption key" readonly>
-                    <button class="btn-secondary" onclick="generateEncryptionKey()">Generate</button>
-                </div>
-            </div>
-
-            <h3 style="margin: 40px 0 20px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"></path>
-                </svg>
-                Optional Settings
-            </h3>
-            
-            <div class="form-group">
-                <label class="form-label">Region</label>
-                <select id="region" class="form-select">
-                    <option value="oregon">Oregon, USA</option>
-                    <option value="ohio">Ohio, USA</option>
-                    <option value="frankfurt">Frankfurt, Germany</option>
-                    <option value="singapore">Singapore</option>
-                </select>
-            </div>
-
-            <div class="cost-display">
-                <h4>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
-                        <line x1="12" y1="1" x2="12" y2="23"></line>
-                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                    </svg>
-                    Monthly Cost
-                </h4>
-                <div class="cost-amount">FREE</div>
-                <p style="color: #94a3b8; font-size: 0.95rem;">
-                    You can upgrade to paid plans anytime from the Render dashboard
-                </p>
-            </div>
-
-            <button class="btn btn-primary" onclick="startDeployment()" id="deploy-btn">
+            <button class="btn btn-primary" onclick="generateInstructions()" id="generate-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 3l14 9-14 9V3z"></path>
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
                 </svg>
-                <span>Deploy DHIS2 Now</span>
+                <span>Generate Deployment Instructions</span>
             </button>
         </div>
 
-        <!-- Step 3: Deploying -->
-        <div id="step-deploying" class="card step-hidden">
+        <!-- Step 3: Instructions -->
+        <div id="step-instructions" class="card step-hidden">
             <div style="text-align: center; margin-bottom: 40px;">
-                <div style="font-size: 64px; margin-bottom: 20px;">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: pulse 2s infinite;">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                    </svg>
-                </div>
-                <h2 style="margin-bottom: 10px;">Deploying Your DHIS2 System</h2>
-                <p style="color: #94a3b8;">This will take approximately 10-15 minutes</p>
+                <div style="font-size: 64px; margin-bottom: 20px;">📋</div>
+                <h2 style="margin-bottom: 10px;">Deployment Instructions Ready!</h2>
+                <p style="color: #94a3b8;">Follow these steps to deploy DHIS2 on Render</p>
             </div>
 
-            <div class="progress-container">
-                <div class="progress-text">
-                    <span>Progress</span>
-                    <span id="progress-percent">0%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill"></div>
+            <div class="info-box success" style="margin-bottom: 30px;">
+                <h4 style="margin-bottom: 10px;">Your Configuration Summary</h4>
+                <div style="font-family: 'Courier New', monospace; font-size: 0.9rem;">
+                    <div style="margin: 5px 0;"><span style="color: #94a3b8;">App Name:</span> <span id="summary-app-name" style="color: #3b82f6;"></span></div>
+                    <div style="margin: 5px 0;"><span style="color: #94a3b8;">DHIS2 Version:</span> <span id="summary-version" style="color: #22c55e;"></span></div>
+                    <div style="margin: 5px 0;"><span style="color: #94a3b8;">Database:</span> <span id="summary-db-name" style="color: #3b82f6;"></span></div>
+                    <div style="margin: 5px 0;"><span style="color: #94a3b8;">Region:</span> <span id="summary-region" style="color: #22c55e;"></span></div>
                 </div>
             </div>
 
-            <ul class="status-list" id="status-list">
-                <!-- Status items will be added here by JavaScript -->
-            </ul>
+            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 25px;">
+                    Step 1: Create PostgreSQL Database
+                </h3>
+                
+                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
+                    <li style="margin-bottom: 15px;">
+                        Go to <a href="https://dashboard.render.com/new/database" target="_blank" style="color: #3b82f6;">Render Dashboard → New PostgreSQL</a>
+                    </li>
+                    <li style="margin-bottom: 15px;">Fill in the database details:</li>
+                </ol>
 
-            <div class="info-box" style="margin-top: 30px;">
-                <p style="color: #cbd5e1;">
-                    Grab a coffee! Your DHIS2 system is being set up with all necessary components.
+                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 20px; margin: 20px 0;">
+                    <div style="margin-bottom: 15px;">
+                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Name:</div>
+                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                            <span id="inst-db-name"></span>
+                            <button onclick="copyToClipboard('inst-db-name')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
+                                📋 Copy
+                            </button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Database:</div>
+                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                            <span id="inst-db-database"></span>
+                            <button onclick="copyToClipboard('inst-db-database')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
+                                📋 Copy
+                            </button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">User:</div>
+                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                            <span id="inst-db-user"></span>
+                            <button onclick="copyToClipboard('inst-db-user')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
+                                📋 Copy
+                            </button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Password:</div>
+                        <div style="font-family: 'Courier New', monospace; color: #22c55e; background: rgba(34, 197, 94, 0.1); padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                            <span id="inst-db-password"></span>
+                            <button onclick="copyToClipboard('inst-db-password')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
+                                📋 Copy
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Region:</div>
+                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px;">
+                            <span id="inst-region"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <ol start="3" style="color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
+                    <li style="margin-bottom: 10px;">Select "Free" plan</li>
+                    <li style="margin-bottom: 10px;">Click "Create Database"</li>
+                    <li style="margin-bottom: 10px;">Wait for database to be created (2-3 minutes)</li>
+                    <li style="margin-bottom: 10px;"><strong style="color: #fbbf24;">Important:</strong> Copy the "Internal Database URL" - you'll need it in the next step</li>
+                </ol>
+            </div>
+
+            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 25px;">
+                    Step 2: Create Web Service
+                </h3>
+                
+                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
+                    <li style="margin-bottom: 15px;">
+                        Go to <a href="https://dashboard.render.com/select-repo?type=web" target="_blank" style="color: #3b82f6;">Render Dashboard → New Web Service</a>
+                    </li>
+                    <li style="margin-bottom: 15px;">Choose "Deploy an existing image from a registry"</li>
+                    <li style="margin-bottom: 15px;">Use this Docker image:</li>
+                </ol>
+
+                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 15px; margin: 20px 0;">
+                    <div style="font-family: 'Courier New', monospace; color: #22c55e; display: flex; justify-content: space-between; align-items: center;">
+                        <span id="inst-docker-image">dhis2/core:2.40.5</span>
+                        <button onclick="copyToClipboard('inst-docker-image')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
+                            📋 Copy
+                        </button>
+                    </div>
+                </div>
+
+                <ol start="4" style="color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
+                    <li style="margin-bottom: 15px;">Configure the service:</li>
+                </ol>
+
+                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 20px; margin: 20px 0;">
+                    <div style="margin-bottom: 15px;">
+                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Name:</div>
+                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                            <span id="inst-app-name"></span>
+                            <button onclick="copyToClipboard('inst-app-name')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
+                                📋 Copy
+                            </button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Region:</div>
+                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px;">
+                            <span id="inst-app-region"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Plan:</div>
+                        <div style="font-family: 'Courier New', monospace; color: #22c55e; background: rgba(34, 197, 94, 0.1); padding: 8px 12px; border-radius: 4px;">
+                            Free (512MB RAM)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 25px;">
+                    Step 3: Configure Environment Variables
+                </h3>
+                
+                <p style="color: #cbd5e1; margin-bottom: 20px;">
+                    In the "Environment" section, add these variables one by one:
                 </p>
-            </div>
-        </div>
 
-        <!-- Step 4: Complete -->
-        <div id="step-complete" class="card step-hidden">
-            <div style="text-align: center; margin-bottom: 40px;">
-                <div style="font-size: 64px; margin-bottom: 20px;">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
+                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 20px; margin-bottom: 15px;" id="env-vars-container">
+                    <!-- Environment variables will be inserted here -->
                 </div>
-                <h2 style="margin-bottom: 10px;">Deployment Complete!</h2>
-                <p style="color: #94a3b8;">Your DHIS2 system is now live and ready to use</p>
-            </div>
 
-            <div class="form-group">
-                <label class="form-label">Your DHIS2 URL</label>
-                <div class="url-display">
-                    <input type="text" id="deployment-url" class="url-input" readonly>
-                    <button class="btn-secondary" onclick="openDeployment()">Open App</button>
+                <div class="info-box warning" style="margin-top: 20px;">
+                    <p style="font-size: 0.9rem;">
+                        <strong>⚠️ Important:</strong> Replace <code style="background: rgba(234, 179, 8, 0.2); padding: 2px 6px; border-radius: 3px;">your-database-internal-url</code> with the actual Internal Database URL you copied from Step 1!
+                    </p>
                 </div>
             </div>
 
-            <div style="margin: 30px 0;">
-                <h4 style="margin-bottom: 15px;">Login Credentials</h4>
-                <div class="credentials-box">
+            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 25px;">
+                    Step 4: Deploy!
+                </h3>
+                
+                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
+                    <li style="margin-bottom: 10px;">Click "Create Web Service"</li>
+                    <li style="margin-bottom: 10px;">Wait 10-15 minutes for the deployment to complete</li>
+                    <li style="margin-bottom: 10px;">Your DHIS2 instance will be available at:</li>
+                </ol>
+
+                <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 15px; margin: 20px 0; text-align: center;">
+                    <div style="font-size: 1.2rem; color: #3b82f6; font-family: 'Courier New', monospace;" id="inst-final-url"></div>
+                </div>
+
+                <div class="credentials-box" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #22c55e;">Login Credentials</h4>
                     <div class="credential-row">
                         <span class="credential-label">Username:</span>
                         <span style="color: #3b82f6;">admin</span>
                     </div>
                     <div class="credential-row">
                         <span class="credential-label">Password:</span>
-                        <span class="credential-value" id="final-password"></span>
+                        <span style="color: #22c55e;">district</span>
                     </div>
+                </div>
+
+                <div class="info-box warning" style="margin-top: 20px;">
+                    <p style="font-size: 0.9rem;">
+                        <strong>🔐 Security:</strong> Change the admin password immediately after your first login!
+                    </p>
                 </div>
             </div>
 
-            <div class="info-box success">
-                <h4 style="margin-bottom: 15px;">What's Been Set Up</h4>
-                <ul class="checklist">
-                    <li>✓ DHIS2 <span id="final-version"></span> deployed</li>
-                    <li>✓ PostgreSQL 15 database with PostGIS</li>
-                    <li>✓ SSL certificate configured</li>
-                    <li>✓ Free tier deployment (512MB RAM, 1GB storage)</li>
-                    <li>✓ Encryption configured</li>
-                </ul>
-            </div>
-
-            <div class="info-box warning">
-                <h4 style="margin-bottom: 15px; color: #fbbf24;">Free Tier Information</h4>
-                <ul class="checklist">
-                    <li>• App spins down after 15 minutes of inactivity</li>
-                    <li>• First request after spin-down takes 30-60 seconds</li>
-                    <li>• 512MB RAM, 1GB Storage</li>
-                    <li>• Perfect for testing and development</li>
-                </ul>
-            </div>
-
             <div class="info-box">
-                <h4 style="margin-bottom: 15px;">Next Steps</h4>
-                <ol style="color: #cbd5e1; padding-left: 20px;">
-                    <li style="margin: 5px 0;">Login to your DHIS2 instance</li>
-                    <li style="margin: 5px 0;">Change your admin password immediately</li>
-                    <li style="margin: 5px 0;">Set up organization units</li>
-                    <li style="margin: 5px 0;">Create user roles and accounts</li>
-                    <li style="margin: 5px 0;">Configure data elements</li>
-                    <li style="margin: 5px 0;">Start collecting data!</li>
-                </ol>
+                <h4 style="margin-bottom: 15px;">Free Tier Limitations</h4>
+                <ul style="color: #cbd5e1; padding-left: 20px;">
+                    <li>App spins down after 15 minutes of inactivity</li>
+                    <li>First request after spin-down takes 30-60 seconds</li>
+                    <li>512MB RAM, 1GB Storage</li>
+                    <li>Perfect for testing and development</li>
+                    <li>Upgrade to paid plans anytime for always-on service</li>
+                </ul>
             </div>
 
-            <div class="grid-2" style="margin-top: 30px;">
-                <button class="btn-secondary" style="width: 100%; grid-column: 1 / -1;" onclick="window.open('https://docs.dhis2.org', '_blank')">
-                    View Documentation
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button class="btn-secondary" style="flex: 1;" onclick="downloadInstructions()">
+                    📄 Download Instructions
+                </button>
+                <button class="btn btn-primary" style="flex: 1;" onclick="window.open('https://dashboard.render.com', '_blank')">
+                    🚀 Go to Render Dashboard
                 </button>
             </div>
         </div>
@@ -722,304 +634,254 @@
     <script>
         // Configuration
         let appConfig = {
-            renderApiKey: '',
             appName: 'dhis2-health',
             dhis2Version: '2.40.5',
-            dbPlan: 'free',
-            webPlan: 'free',
             region: 'oregon',
-            adminPassword: 'district',
-            encryptionKey: '',
-            dbName: 'dhis2',
-            dbUser: 'dhis'
+            dbName: 'dhis2_db',
+            dbUser: 'dhis2_user',
+            dbPassword: '',
+            encryptionKey: ''
         };
 
-        // Connect to Render (Simulated)
-        async function connectToRender() {
-            const btn = document.getElementById('connect-btn');
-            btn.disabled = true;
-            btn.innerHTML = '<div class="spinner"></div> Connecting to Render...';
-
-            // Simulate API connection
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
-            // Generate mock API key
-            const mockApiKey = 'rnd_' + generateRandomString(32);
-            appConfig.renderApiKey = mockApiKey;
-
-            // Show success
-            document.getElementById('connection-status').className = 'info-box success';
-            document.getElementById('connection-status').innerHTML = `
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <div style="font-size: 40px;">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                    </div>
-                    <div>
-                        <h4 style="margin-bottom: 5px;">Connection Successful!</h4>
-                        <p style="color: #cbd5e1; font-size: 0.95rem;">API credentials generated securely</p>
-                        <p style="color: #94a3b8; font-size: 0.875rem; margin-top: 10px; display: flex; align-items: center; gap: 5px;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                            </svg>
-                            Credentials encrypted and ready for deployment
-                        </p>
-                    </div>
-                </div>
-            `;
-
-            // Move to config step
-            setTimeout(() => {
-                document.getElementById('step-setup').classList.add('step-hidden');
-                document.getElementById('step-config').classList.remove('step-hidden');
-            }, 1500);
+        // Initialize
+        function init() {
+            generatePassword('db-password');
+            generatePassword('encryption-key');
         }
 
-        // Generate encryption key
-        function generateEncryptionKey() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-            let key = '';
+        // Start configuration
+        function startConfiguration() {
+            document.getElementById('step-setup').classList.add('step-hidden');
+            document.getElementById('step-config').classList.remove('step-hidden');
+        }
+
+        // Generate secure password
+        function generatePassword(fieldId) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*_-';
+            let password = '';
             for (let i = 0; i < 32; i++) {
-                key += chars.charAt(Math.floor(Math.random() * chars.length));
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
             }
-            document.getElementById('encryption-key').value = key;
-            appConfig.encryptionKey = key;
+            document.getElementById(fieldId).value = password;
         }
 
-        // Start deployment
-        async function startDeployment() {
+        // Generate instructions
+        function generateInstructions() {
             // Get values
-            appConfig.appName = document.getElementById('app-name').value;
+            appConfig.appName = document.getElementById('app-name').value || 'dhis2-health';
             appConfig.dhis2Version = document.getElementById('dhis2-version').value;
             appConfig.region = document.getElementById('region').value;
+            appConfig.dbName = document.getElementById('db-name').value;
+            appConfig.dbUser = document.getElementById('db-user').value;
+            appConfig.dbPassword = document.getElementById('db-password').value;
+            appConfig.encryptionKey = document.getElementById('encryption-key').value;
 
             // Validate
             if (!appConfig.appName) {
                 alert('Please enter an application name');
                 return;
             }
-
+            if (!appConfig.dbPassword) {
+                alert('Please generate a database password');
+                return;
+            }
             if (!appConfig.encryptionKey) {
                 alert('Please generate an encryption key');
                 return;
             }
 
-            // Hide config, show deploying
-            document.getElementById('step-config').classList.add('step-hidden');
-            document.getElementById('step-deploying').classList.remove('step-hidden');
+            // Clean app name
+            const cleanName = appConfig.appName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+            
+            // Fill in summary
+            document.getElementById('summary-app-name').textContent = cleanName;
+            document.getElementById('summary-version').textContent = appConfig.dhis2Version;
+            document.getElementById('summary-db-name').textContent = appConfig.dbName;
+            document.getElementById('summary-region').textContent = appConfig.region;
 
-            // Run deployment simulation
-            await runDeployment();
-        }
+            // Fill in Step 1 - Database
+            document.getElementById('inst-db-name').textContent = cleanName + '-db';
+            document.getElementById('inst-db-database').textContent = appConfig.dbName;
+            document.getElementById('inst-db-user').textContent = appConfig.dbUser;
+            document.getElementById('inst-db-password').textContent = appConfig.dbPassword;
+            document.getElementById('inst-region').textContent = appConfig.region;
 
-        // Run deployment simulation
-        async function runDeployment() {
-            const steps = [
-                { progress: 10, message: 'Authenticating with Render...' },
-                { progress: 20, message: 'Creating deployment package...' },
-                { progress: 30, message: 'Setting up free tier resources...' },
-                { progress: 45, message: 'Creating PostgreSQL database...' },
-                { progress: 60, message: 'Building Docker image...' },
-                { progress: 75, message: 'Installing PostgreSQL extensions...' },
-                { progress: 85, message: 'Deploying DHIS2 application...' },
-                { progress: 95, message: 'Configuring health checks...' },
-                { progress: 100, message: 'Deployment complete!' }
+            // Fill in Step 2 - Web Service
+            document.getElementById('inst-docker-image').textContent = `dhis2/core:${appConfig.dhis2Version}`;
+            document.getElementById('inst-app-name').textContent = cleanName;
+            document.getElementById('inst-app-region').textContent = appConfig.region;
+
+            // Fill in Step 3 - Environment Variables
+            const envVars = [
+                { key: 'DHIS2_DATABASE_HOST', value: 'your-database-internal-url', note: 'Replace with Internal Database URL from Step 1' },
+                { key: 'DHIS2_DATABASE_NAME', value: appConfig.dbName },
+                { key: 'DHIS2_DATABASE_USERNAME', value: appConfig.dbUser },
+                { key: 'DHIS2_DATABASE_PASSWORD', value: appConfig.dbPassword, sensitive: true },
+                { key: 'DHIS2_ENCRYPTION_KEY', value: appConfig.encryptionKey, sensitive: true },
+                { key: 'DHIS2_SERVER_BASE_URL', value: `https://${cleanName}.onrender.com` },
+                { key: 'DHIS2_SERVER_HTTPS', value: 'on' }
             ];
 
-            const statusList = document.getElementById('status-list');
-            const progressFill = document.getElementById('progress-fill');
-            const progressPercent = document.getElementById('progress-percent');
-
-            for (const step of steps) {
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                progressFill.style.width = step.progress + '%';
-                progressPercent.textContent = step.progress + '%';
-
-                const li = document.createElement('li');
-                li.className = 'status-item';
-                li.innerHTML = `
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    ${step.message}
-                `;
-                statusList.appendChild(li);
-            }
-
-            // Show complete screen
-            setTimeout(() => {
-                showComplete();
-            }, 1000);
-        }
-
-        // Show complete screen
-        function showComplete() {
-            const deploymentUrl = `https://${appConfig.appName}.onrender.com`;
-            
-            document.getElementById('step-deploying').classList.add('step-hidden');
-            document.getElementById('step-complete').classList.remove('step-hidden');
-
-            document.getElementById('deployment-url').value = deploymentUrl;
-            document.getElementById('final-password').textContent = appConfig.adminPassword;
-            document.getElementById('final-version').textContent = appConfig.dhis2Version;
-
-            // Show popup with credentials
-            setTimeout(() => {
-                showCredentialsPopup(deploymentUrl);
-            }, 500);
-        }
-
-        // Show credentials popup
-        function showCredentialsPopup(url) {
-            const popup = document.createElement('div');
-            popup.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.8);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-                animation: fadeIn 0.3s ease;
-            `;
-
-            popup.innerHTML = `
-                <div style="
-                    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-                    border: 2px solid #3b82f6;
-                    border-radius: 20px;
-                    padding: 40px;
-                    max-width: 500px;
-                    width: 90%;
-                    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-                    animation: slideUp 0.3s ease;
-                ">
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <div style="font-size: 64px; margin-bottom: 15px;">
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" style="display: inline-block;">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                        </div>
-                        <h2 style="color: #ffffff; margin-bottom: 10px;">Deployment Successful!</h2>
-                        <p style="color: #94a3b8;">Your DHIS2 system is now live</p>
-                    </div>
-
-                    <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 25px;">
-                        <h4 style="color: #3b82f6; margin-bottom: 15px; font-size: 1.1rem;">Your DHIS2 URL</h4>
-                        <div style="background: rgba(30, 41, 59, 0.8); padding: 12px; border-radius: 8px; word-break: break-all; font-family: 'Courier New', monospace; color: #3b82f6; margin-bottom: 15px;">
-                            ${url}
-                        </div>
-                        <button onclick="window.open('${url}', '_blank')" style="
-                            width: 100%;
-                            padding: 12px;
-                            background: #3b82f6;
-                            color: white;
-                            border: none;
-                            border-radius: 8px;
-                            font-size: 1rem;
-                            font-weight: 600;
-                            cursor: pointer;
-                        ">
-                            Open DHIS2 App
+            const envVarsContainer = document.getElementById('env-vars-container');
+            envVarsContainer.innerHTML = envVars.map((env, idx) => `
+                <div style="margin-bottom: ${idx < envVars.length - 1 ? '20px' : '0'}; padding-bottom: ${idx < envVars.length - 1 ? '20px' : '0'}; border-bottom: ${idx < envVars.length - 1 ? '1px solid rgba(100, 116, 139, 0.3)' : 'none'};">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div style="color: #94a3b8; font-size: 0.85rem; font-weight: 600;">${env.key}</div>
+                        <button onclick="copyEnvVar('${env.key}', '${env.value.replace(/'/g, "\\'")}', this)" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px; font-size: 0.85rem;">
+                            📋 Copy
                         </button>
                     </div>
-
-                    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 25px;">
-                        <h4 style="color: #22c55e; margin-bottom: 15px; font-size: 1.1rem;">Login Credentials</h4>
-                        <div style="font-family: 'Courier New', monospace;">
-                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(100, 116, 139, 0.3);">
-                                <span style="color: #94a3b8;">Username:</span>
-                                <span style="color: #3b82f6; font-weight: bold;">admin</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; padding: 8px 0;">
-                                <span style="color: #94a3b8;">Password:</span>
-                                <span style="color: #22c55e; font-weight: bold;">district</span>
-                            </div>
-                        </div>
+                    <div style="font-family: 'Courier New', monospace; color: ${env.sensitive ? '#22c55e' : '#3b82f6'}; background: ${env.sensitive ? 'rgba(34, 197, 94, 0.1)' : 'rgba(59, 130, 246, 0.1)'}; padding: 8px 12px; border-radius: 4px; word-break: break-all; font-size: 0.85rem;">
+                        ${env.value}
                     </div>
-
-                    <div style="background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 12px; padding: 15px; margin-bottom: 25px;">
-                        <p style="color: #fbbf24; font-size: 0.9rem; margin: 0;">
-                            <strong>Security Notice:</strong> Change your password immediately after first login!
-                        </p>
-                    </div>
-
-                    <button onclick="this.parentElement.parentElement.remove()" style="
-                        width: 100%;
-                        padding: 14px;
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                        color: white;
-                        border: none;
-                        border-radius: 10px;
-                        font-size: 1.1rem;
-                        font-weight: 600;
-                        cursor: pointer;
-                    ">
-                        Got it! Let's Go
-                    </button>
+                    ${env.note ? `<div style="color: #fbbf24; font-size: 0.8rem; margin-top: 5px;">⚠️ ${env.note}</div>` : ''}
                 </div>
+            `).join('');
+
+            // Fill in Step 4 - Final URL
+            document.getElementById('inst-final-url').textContent = `https://${cleanName}.onrender.com`;
+
+            // Show instructions
+            document.getElementById('step-config').classList.add('step-hidden');
+            document.getElementById('step-instructions').classList.remove('step-hidden');
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard!');
+            }).catch(() => {
+                showToast('Copy failed. Please copy manually.');
+            });
+        }
+
+        // Copy environment variable
+        function copyEnvVar(key, value, button) {
+            const text = `${key}=${value}`;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✓ Copied!';
+                button.style.color = '#22c55e';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.color = '#94a3b8';
+                }, 2000);
+            }).catch(() => {
+                showToast('Copy failed. Please copy manually.');
+            });
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                z-index: 10000;
+                animation: slideInUp 0.3s ease;
+                font-weight: 500;
             `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
 
-            document.body.appendChild(popup);
-
-            // Add animations
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-                @keyframes slideUp {
-                    from { 
-                        transform: translateY(50px);
-                        opacity: 0;
-                    }
-                    to { 
-                        transform: translateY(0);
-                        opacity: 1;
-                    }
-                }
-                @keyframes pulse {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.5; }
-                }
-            `;
-            document.head.appendChild(style);
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
         }
 
-        // Open deployment
-        function openDeployment() {
-            const url = document.getElementById('deployment-url').value;
-            window.open(url, '_blank');
+        // Download instructions
+        function downloadInstructions() {
+            const cleanName = appConfig.appName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+            
+            const instructions = `DHIS2 Deployment Instructions for Render
+============================================
+
+Configuration Summary:
+- App Name: ${cleanName}
+- DHIS2 Version: ${appConfig.dhis2Version}
+- Database Name: ${appConfig.dbName}
+- Region: ${appConfig.region}
+
+STEP 1: Create PostgreSQL Database
+-----------------------------------
+1. Go to https://dashboard.render.com/new/database
+2. Fill in the details:
+   - Name: ${cleanName}-db
+   - Database: ${appConfig.dbName}
+   - User: ${appConfig.dbUser}
+   - Password: ${appConfig.dbPassword}
+   - Region: ${appConfig.region}
+3. Select "Free" plan
+4. Click "Create Database"
+5. IMPORTANT: Copy the "Internal Database URL" for the next step
+
+STEP 2: Create Web Service
+---------------------------
+1. Go to https://dashboard.render.com/select-repo?type=web
+2. Choose "Deploy an existing image from a registry"
+3. Docker Image: dhis2/core:${appConfig.dhis2Version}
+4. Configure:
+   - Name: ${cleanName}
+   - Region: ${appConfig.region}
+   - Plan: Free (512MB RAM)
+
+STEP 3: Configure Environment Variables
+----------------------------------------
+Add these environment variables:
+
+DHIS2_DATABASE_HOST=your-database-internal-url
+(Replace with the Internal Database URL from Step 1)
+
+DHIS2_DATABASE_NAME=${appConfig.dbName}
+DHIS2_DATABASE_USERNAME=${appConfig.dbUser}
+DHIS2_DATABASE_PASSWORD=${appConfig.dbPassword}
+DHIS2_ENCRYPTION_KEY=${appConfig.encryptionKey}
+DHIS2_SERVER_BASE_URL=https://${cleanName}.onrender.com
+DHIS2_SERVER_HTTPS=on
+
+STEP 4: Deploy
+--------------
+1. Click "Create Web Service"
+2. Wait 10-15 minutes for deployment
+3. Your DHIS2 will be at: https://${cleanName}.onrender.com
+
+Login Credentials:
+- Username: admin
+- Password: district
+⚠️ CHANGE THIS PASSWORD IMMEDIATELY AFTER FIRST LOGIN!
+
+Free Tier Notes:
+- App spins down after 15 minutes of inactivity
+- First request after spin-down takes 30-60 seconds
+- 512MB RAM, 1GB Storage
+- Perfect for testing and development
+
+Need help? Visit https://docs.dhis2.org
+`;
+
+            const blob = new Blob([instructions], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `dhis2-${cleanName}-deployment-instructions.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Instructions downloaded!');
         }
 
-        // Helper function
-        function generateRandomString(length) {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let result = '';
-            for (let i = 0; i < length; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
-        }
-
-        // Update URL preview
-        function updateUrlPreview() {
-            const appName = document.getElementById('app-name').value || 'dhis2-health';
-            const cleanName = appName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
-            document.getElementById('url-preview').textContent = `https://${cleanName}.onrender.com`;
-        }
-
-        // Initialize
-        generateEncryptionKey();
-        updateUrlPreview();
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
