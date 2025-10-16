@@ -616,15 +616,26 @@
 
             <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
                 <h3 style="margin-bottom: 25px;">
-                    Step 5: Configure dhis.conf (Optional but Recommended)
+                    Step 5: dhis.conf Configuration (Alternative to Environment Variables)
                 </h3>
                 
+                <div class="info-box warning" style="margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px; color: #fbbf24;">Important: Choose One Method</h4>
+                    <p style="color: #cbd5e1; font-size: 0.95rem;">
+                        You can configure DHIS2 using <strong>either</strong>:
+                        <br>• <strong>Environment Variables</strong> (Step 3 above) - Recommended for Render
+                        <br>• <strong>dhis.conf file</strong> (This step) - For advanced users
+                        <br><br>
+                        Most users should use environment variables (Step 3) and skip this section.
+                    </p>
+                </div>
+
                 <p style="color: #cbd5e1; margin-bottom: 20px;">
-                    Enter your Database Internal URL below to generate your complete <code style="background: rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 3px;">dhis.conf</code> file configuration.
+                    If you prefer using a <code style="background: rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 3px;">dhis.conf</code> file instead of environment variables, enter your Database Internal URL below to generate the configuration.
                 </p>
 
                 <div class="form-group">
-                    <label class="form-label">Database Internal URL *</label>
+                    <label class="form-label">Database Internal URL</label>
                     <input type="text" id="db-internal-url" class="form-input" placeholder="postgresql://user:pass@host:5432/dbname" oninput="updateDhisConf()">
                     <p class="form-hint">Paste your database Internal URL from Step 1</p>
                 </div>
@@ -642,7 +653,40 @@
                         style="width: 100%; height: 400px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #e2e8f0; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(100, 116, 139, 0.5); border-radius: 8px; padding: 15px; resize: vertical; line-height: 1.6;"
                         onclick="this.select()"
                     ></textarea>
-                    <p class="form-hint" style="margin-top: 8px;">Click the text area to select all, then copy. Or click "Download dhis.conf" to save as a file.</p>
+                    <p class="form-hint" style="margin-top: 8px;">Click the text area to select all, then copy.</p>
+
+                    <div class="info-box" style="margin-top: 20px;">
+                        <h4 style="margin-bottom: 15px; color: #3b82f6;">📁 Where to place dhis.conf</h4>
+                        <p style="color: #cbd5e1; margin-bottom: 15px;">
+                            The <code style="background: rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 3px;">dhis.conf</code> file must be placed in the DHIS2 home directory inside the container:
+                        </p>
+                        <div style="background: rgba(15, 23, 42, 0.8); border-radius: 6px; padding: 12px; margin-bottom: 15px;">
+                            <code style="color: #22c55e; font-size: 0.9rem;">/opt/dhis2/dhis.conf</code>
+                        </div>
+                        <p style="color: #cbd5e1; margin-bottom: 15px; font-size: 0.95rem;">
+                            <strong>For Render deployment, you have two options:</strong>
+                        </p>
+                        <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8; font-size: 0.95rem;">
+                            <li style="margin-bottom: 10px;">
+                                <strong style="color: #22c55e;">Use Environment Variables (Recommended)</strong><br>
+                                Use the environment variables from Step 3. Render will automatically configure DHIS2.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong style="color: #fbbf24;">Create a Custom Docker Image</strong><br>
+                                Build your own Docker image that includes the dhis.conf file:
+                                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 6px; padding: 12px; margin-top: 10px; font-family: 'Courier New', monospace; font-size: 0.85rem;">
+<span style="color: #94a3b8;"># Dockerfile</span>
+FROM dhis2/core:${appConfig.dhis2Version}
+COPY dhis.conf /opt/dhis2/dhis.conf
+                                </div>
+                            </li>
+                        </ol>
+                        <div style="background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 6px; padding: 12px; margin-top: 15px;">
+                            <p style="color: #fbbf24; font-size: 0.9rem; margin: 0;">
+                                <strong>💡 Recommendation:</strong> For Render, stick with environment variables (Step 3) unless you have a specific reason to use dhis.conf.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="dhis-conf-placeholder" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 20px; text-align: center; color: #94a3b8;">
@@ -859,6 +903,7 @@
             };
 
             try {
+                // Format: postgresql://user:pass@host:port/database or postgresql://user:pass@host/database
                 const urlMatch = dbUrl.match(/postgresql:\/\/([^:]+):([^@]+)@([^:\/]+):?(\d+)?\/(.+)/);
                 if (urlMatch) {
                     parsedDb.username = urlMatch[1];
@@ -871,89 +916,22 @@
                 console.error('Error parsing database URL', e);
             }
 
-            const dhisConf = `# DHIS2 Configuration File
-# Generated by DHIS2 Deployment Tool
-# Date: ${new Date().toISOString().split('T')[0]}
-
-# ===================================
-# Database Configuration
-# ===================================
+            const dhisConf = `# Database Configuration
 connection.dialect = org.hibernate.dialect.PostgreSQLDialect
 connection.driver_class = org.postgresql.Driver
 connection.url = jdbc:postgresql://${parsedDb.host}:${parsedDb.port}/${parsedDb.database}
 connection.username = ${parsedDb.username}
 connection.password = ${parsedDb.password}
 
-# Database connection pool settings
-connection.pool.max_size = 40
-connection.pool.min_size = 5
-connection.pool.timeout = 30000
-connection.pool.idle_timeout = 300000
-
-# ===================================
 # Server Configuration
-# ===================================
 server.base.url = https://${cleanName}.onrender.com
-server.https = on
 
-# ===================================
-# File Storage Configuration
-# ===================================
+# File Storage
 filestore.provider = filesystem
 filestore.container = files
 
-# ===================================
-# Security Configuration
-# ===================================
+# Security
 encryption.password = ${appConfig.encryptionKey}
-
-# ===================================
-# System Configuration
-# ===================================
-# System identifier
-system.id = ${cleanName}
-
-# Monitoring
-system.monitoring.url = 
-system.monitoring.username = 
-system.monitoring.password = 
-
-# ===================================
-# Analytics Configuration
-# ===================================
-analytics.cache.expiration = 3600
-
-# ===================================
-# Email Configuration (Optional)
-# ===================================
-# Configure these if you want email notifications
-# mail.transport.protocol = smtp
-# mail.smtp.host = smtp.gmail.com
-# mail.smtp.port = 587
-# mail.smtp.username = your-email@gmail.com
-# mail.smtp.password = your-app-password
-# mail.smtp.auth = true
-# mail.smtp.starttls.enable = true
-# mail.from = noreply@yourdomain.com
-
-# ===================================
-# LDAP Configuration (Optional)
-# ===================================
-# Uncomment and configure if using LDAP authentication
-# ldap.url = ldaps://ldap.example.com:636
-# ldap.manager.dn = cn=admin,dc=example,dc=com
-# ldap.manager.password = password
-# ldap.search.base = dc=example,dc=com
-# ldap.search.filter = (cn={0})
-
-# ===================================
-# Logging Configuration
-# ===================================
-logging.level = INFO
-
-# ===================================
-# End of Configuration
-# ===================================
 `;
 
             confContent.value = dhisConf;
