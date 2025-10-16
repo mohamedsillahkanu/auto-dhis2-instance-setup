@@ -713,7 +713,7 @@
 
             // Fill in Step 3 - Environment Variables
             const envVars = [
-                { key: 'DHIS2_DATABASE_HOST', value: 'your-database-internal-url', note: 'Replace with Internal Database URL from Step 1' },
+                { key: 'DHIS2_DATABASE_HOST', value: 'your-database-internal-url', editable: true, note: 'Paste the Internal Database URL from Step 1 into the field above' },
                 { key: 'DHIS2_DATABASE_NAME', value: appConfig.dbName },
                 { key: 'DHIS2_DATABASE_USERNAME', value: appConfig.dbUser },
                 { key: 'DHIS2_DATABASE_PASSWORD', value: appConfig.dbPassword, sensitive: true },
@@ -725,14 +725,29 @@
             const envVarsContainer = document.getElementById('env-vars-container');
             envVarsContainer.innerHTML = envVars.map((env, idx) => `
                 <div style="margin-bottom: ${idx < envVars.length - 1 ? '25px' : '0'}; padding-bottom: ${idx < envVars.length - 1 ? '25px' : '0'}; border-bottom: ${idx < envVars.length - 1 ? '1px solid rgba(100, 116, 139, 0.3)' : 'none'};">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <div style="font-family: 'Courier New', monospace; color: #e2e8f0; font-size: 0.9rem; font-weight: 600;">${env.key}</div>
-                        <button onclick="copyEnvVar('${env.key}', '${env.value.replace(/'/g, "\\'")}', this)" style="background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #3b82f6; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; transition: all 0.2s;">
-                            📋 Copy Both
-                        </button>
+                    <div style="margin-bottom: 8px;">
+                        <div style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Key</div>
+                        <div style="font-family: 'Courier New', monospace; color: #e2e8f0; font-size: 0.95rem; font-weight: 600; background: rgba(30, 41, 59, 0.6); padding: 10px 12px; border-radius: 6px; border: 1px solid rgba(100, 116, 139, 0.3);">
+                            ${env.key}
+                        </div>
                     </div>
-                    <div style="font-family: 'Courier New', monospace; color: ${env.sensitive ? '#22c55e' : '#3b82f6'}; background: ${env.sensitive ? 'rgba(34, 197, 94, 0.1)' : 'rgba(59, 130, 246, 0.1)'}; border: 1px solid ${env.sensitive ? 'rgba(34, 197, 94, 0.3)' : 'rgba(59, 130, 246, 0.3)'}; padding: 12px 15px; border-radius: 6px; word-break: break-all; font-size: 0.9rem; line-height: 1.5;">
-                        ${env.value}
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Value</div>
+                        ${env.editable ? `
+                            <input 
+                                type="text" 
+                                id="env-input-${idx}"
+                                value="${env.value}"
+                                placeholder="Paste your database URL here"
+                                style="width: 100%; font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); border: 2px solid rgba(59, 130, 246, 0.4); padding: 10px 12px; border-radius: 6px; font-size: 0.9rem; transition: all 0.2s;"
+                                onfocus="this.style.borderColor='rgba(59, 130, 246, 0.6)'; this.select();"
+                                onblur="this.style.borderColor='rgba(59, 130, 246, 0.4)';"
+                            />
+                        ` : `
+                            <div style="font-family: 'Courier New', monospace; color: ${env.sensitive ? '#22c55e' : '#3b82f6'}; background: ${env.sensitive ? 'rgba(34, 197, 94, 0.1)' : 'rgba(59, 130, 246, 0.1)'}; border: 1px solid ${env.sensitive ? 'rgba(34, 197, 94, 0.3)' : 'rgba(59, 130, 246, 0.3)'}; padding: 10px 12px; border-radius: 6px; word-break: break-all; font-size: 0.9rem; user-select: all;">
+                                ${env.value}
+                            </div>
+                        `}
                     </div>
                     ${env.note ? `<div style="background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 6px; padding: 10px 12px; color: #fbbf24; font-size: 0.85rem; margin-top: 10px; display: flex; align-items: start; gap: 8px;"><span style="flex-shrink: 0;">⚠️</span><span>${env.note}</span></div>` : ''}
                 </div>
@@ -756,21 +771,7 @@
             });
         }
 
-        // Copy environment variable
-        function copyEnvVar(key, value, button) {
-            const text = `${key}=${value}`;
-            navigator.clipboard.writeText(text).then(() => {
-                const originalText = button.textContent;
-                button.textContent = '✓ Copied!';
-                button.style.color = '#22c55e';
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.color = '#94a3b8';
-                }, 2000);
-            }).catch(() => {
-                showToast('Copy failed. Please copy manually.');
-            });
-        }
+
 
         // Show toast notification
         function showToast(message) {
