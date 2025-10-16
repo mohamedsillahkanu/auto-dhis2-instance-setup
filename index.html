@@ -254,70 +254,22 @@
         <!-- Header -->
         <div class="header">
             <div class="header-icon">⚕️</div>
-            <h1>DHIS2 One-Click Deployment</h1>
+            <h1>DHIS2 Render Deployment</h1>
             <p>Deploy DHIS2 to Render with Free Tier • No Credit Card Required</p>
         </div>
 
-        <!-- Step 1: Setup -->
-        <div id="step-setup" class="card">
-            <h2 style="margin-bottom: 30px; text-align: center;">Quick Setup Guide</h2>
-            
-            <div class="feature-grid">
-                <div class="feature-item">
-                    <div class="feature-icon blue">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h4 style="margin-bottom: 10px;">Secure & Private</h4>
-                        <p style="color: #94a3b8; font-size: 0.95rem;">
-                            Deploy directly to your own Render account. No middleman, complete control.
-                        </p>
-                    </div>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon green">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                            <line x1="1" y1="10" x2="23" y2="10"></line>
-                        </svg>
-                    </div>
-                    <div>
-                        <h4 style="margin-bottom: 10px;">Free Tier Available</h4>
-                        <p style="color: #94a3b8; font-size: 0.95rem;">
-                            Start with Render's free tier (512MB RAM, 1GB storage). Perfect for testing and small deployments.
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <!-- Step 1: Complete Configuration -->
+        <div id="step-config" class="card">
+            <h2 style="margin-bottom: 30px; text-align: center;">Step 1: Complete Configuration</h2>
 
             <div class="info-box">
-                <h4 style="margin-bottom: 15px;">Before You Begin</h4>
-                <p style="color: #cbd5e1; margin-bottom: 15px;">
-                    This tool will generate the exact configuration you need to deploy DHIS2 on Render. You'll need:
+                <h4 style="margin-bottom: 10px;">📋 What You'll Need</h4>
+                <p style="color: #cbd5e1; font-size: 0.95rem;">
+                    Fill in ALL configuration details below. We'll generate everything you need for deployment.
                 </p>
-                <ul style="color: #cbd5e1; padding-left: 20px; list-style: none;">
-                    <li style="margin: 8px 0;">✓ A free Render account (<a href="https://render.com/register" target="_blank" style="color: #3b82f6;">Sign up here</a>)</li>
-                    <li style="margin: 8px 0;">✓ 5-10 minutes to complete the setup</li>
-                    <li style="margin: 8px 0;">✓ No credit card required for free tier</li>
-                </ul>
             </div>
 
-            <button class="btn btn-primary" onclick="startConfiguration()" id="start-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 3l14 9-14 9V3z"></path>
-                </svg>
-                <span>Start Configuration</span>
-            </button>
-        </div>
-
-        <!-- Step 2: Configuration -->
-        <div id="step-config" class="card step-hidden">
-            <h2 style="margin-bottom: 30px; text-align: center;">Configure Your DHIS2 Deployment</h2>
-
-            <h3 style="margin-bottom: 20px;">
+            <h3 style="margin: 30px 0 20px;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
                     <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
                 </svg>
@@ -359,6 +311,21 @@
                 </svg>
                 Database Configuration
             </h3>
+
+            <div class="info-box warning">
+                <p style="font-size: 0.95rem; color: #fbbf24;">
+                    <strong>⚠️ Important:</strong> First, create your database on Render, then paste the Internal Database URL below.
+                </p>
+                <button class="btn-secondary" style="width: 100%; margin-top: 15px;" onclick="window.open('https://dashboard.render.com/new/database', '_blank')">
+                    🗄️ Create Database on Render First
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Database Internal URL *</label>
+                <input type="text" id="db-internal-url" class="form-input" placeholder="postgresql://user:pass@host:5432/dbname">
+                <p class="form-hint">After creating database on Render, copy the "Internal Database URL" and paste it here</p>
+            </div>
 
             <div class="form-group">
                 <label class="form-label">Database Name *</label>
@@ -406,297 +373,102 @@
                 </p>
             </div>
 
-            <button class="btn btn-primary" onclick="generateInstructions()" id="generate-btn">
+            <button class="btn btn-primary" onclick="generateDeploymentFiles()" id="generate-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                     <polyline points="14 2 14 8 20 8"></polyline>
                 </svg>
-                <span>Generate Deployment Instructions</span>
+                <span>Generate All Configuration Files</span>
             </button>
         </div>
 
-        <!-- Step 3: Instructions -->
-        <div id="step-instructions" class="card step-hidden">
-            <div style="text-align: center; margin-bottom: 40px;">
-                <div style="font-size: 64px; margin-bottom: 20px;">📋</div>
-                <h2 style="margin-bottom: 10px;">Deployment Instructions Ready!</h2>
-                <p style="color: #94a3b8;">Follow these steps to deploy DHIS2 on Render</p>
+        <!-- Step 2: Deployment Files -->
+        <div id="step-deploy" class="card step-hidden">
+            <h2 style="margin-bottom: 30px; text-align: center;">Step 2: Deploy to Render</h2>
+
+            <div class="info-box success">
+                <h4 style="margin-bottom: 10px;">✅ Configuration Complete!</h4>
+                <p style="color: #cbd5e1; font-size: 0.95rem;">
+                    All your configuration files are ready. Use the files below to deploy DHIS2.
+                </p>
             </div>
 
-            <div class="info-box success" style="margin-bottom: 30px;">
-                <h4 style="margin-bottom: 10px;">Your Configuration Summary</h4>
+            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 25px;">Configuration Summary</h3>
                 <div style="font-family: 'Courier New', monospace; font-size: 0.9rem;">
                     <div style="margin: 5px 0;"><span style="color: #94a3b8;">App Name:</span> <span id="summary-app-name" style="color: #3b82f6;"></span></div>
                     <div style="margin: 5px 0;"><span style="color: #94a3b8;">DHIS2 Version:</span> <span id="summary-version" style="color: #22c55e;"></span></div>
                     <div style="margin: 5px 0;"><span style="color: #94a3b8;">Database:</span> <span id="summary-db-name" style="color: #3b82f6;"></span></div>
-                    <div style="margin: 5px 0;"><span style="color: #94a3b8;">Region:</span> <span id="summary-region" style="color: #22c55e;"></span></div>
+                    <div style="margin: 5px 0;"><span style="color: #94a3b8;">Your URL:</span> <span id="summary-url" style="color: #22c55e;"></span></div>
                 </div>
             </div>
 
-            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
-                <h3 style="margin-bottom: 25px;">
-                    Step 1: Create PostgreSQL Database
-                </h3>
-                
-                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
-                    <li style="margin-bottom: 15px;">
-                        Go to <a href="https://dashboard.render.com/new/database" target="_blank" style="color: #3b82f6;">Render Dashboard → New PostgreSQL</a>
-                    </li>
-                    <li style="margin-bottom: 15px;">Fill in the database details:</li>
-                </ol>
-
-                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 20px; margin: 20px 0;">
-                    <div style="margin-bottom: 15px;">
-                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Name:</div>
-                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
-                            <span id="inst-db-name"></span>
-                            <button onclick="copyToClipboard('inst-db-name')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
-                                📋 Copy
-                            </button>
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Database:</div>
-                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
-                            <span id="inst-db-database"></span>
-                            <button onclick="copyToClipboard('inst-db-database')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
-                                📋 Copy
-                            </button>
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">User:</div>
-                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
-                            <span id="inst-db-user"></span>
-                            <button onclick="copyToClipboard('inst-db-user')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
-                                📋 Copy
-                            </button>
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Password:</div>
-                        <div style="font-family: 'Courier New', monospace; color: #22c55e; background: rgba(34, 197, 94, 0.1); padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
-                            <span id="inst-db-password"></span>
-                            <button onclick="copyToClipboard('inst-db-password')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
-                                📋 Copy
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Region:</div>
-                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px;">
-                            <span id="inst-region"></span>
-                        </div>
-                    </div>
+            <!-- Dockerfile -->
+            <div style="margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <label class="form-label" style="margin: 0;">📄 Dockerfile</label>
+                    <button class="btn-secondary" onclick="downloadDockerfile()">
+                        📥 Download
+                    </button>
                 </div>
-
-                <ol start="3" style="color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
-                    <li style="margin-bottom: 10px;">Select "Free" plan</li>
-                    <li style="margin-bottom: 10px;">Click "Create Database"</li>
-                    <li style="margin-bottom: 10px;">Wait for database to be created (2-3 minutes)</li>
-                    <li style="margin-bottom: 10px;"><strong style="color: #fbbf24;">Important:</strong> Copy the "Internal Database URL" - you'll need it in the next step</li>
-                </ol>
+                <textarea 
+                    id="dockerfile-content" 
+                    style="width: 100%; height: 200px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #e2e8f0; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(100, 116, 139, 0.5); border-radius: 8px; padding: 15px; resize: vertical; line-height: 1.6;"
+                    onclick="this.select()"
+                ></textarea>
             </div>
 
-            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
-                <h3 style="margin-bottom: 25px;">
-                    Step 2: Create Web Service
-                </h3>
-                
-                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
-                    <li style="margin-bottom: 15px;">
-                        Go to <a href="https://dashboard.render.com/select-repo?type=web" target="_blank" style="color: #3b82f6;">Render Dashboard → New Web Service</a>
-                    </li>
-                    <li style="margin-bottom: 15px;">Choose "Deploy an existing image from a registry"</li>
-                    <li style="margin-bottom: 15px;">Use this Docker image:</li>
-                </ol>
-
-                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 15px; margin: 20px 0;">
-                    <div style="font-family: 'Courier New', monospace; color: #22c55e; display: flex; justify-content: space-between; align-items: center;">
-                        <span id="inst-docker-image">dhis2/core:2.40.5</span>
-                        <button onclick="copyToClipboard('inst-docker-image')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
-                            📋 Copy
-                        </button>
-                    </div>
+            <!-- dhis.conf -->
+            <div style="margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <label class="form-label" style="margin: 0;">⚙️ dhis.conf</label>
+                    <button class="btn-secondary" onclick="downloadDhisConf()">
+                        📥 Download
+                    </button>
                 </div>
-
-                <ol start="4" style="color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
-                    <li style="margin-bottom: 15px;">Configure the service:</li>
-                </ol>
-
-                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 20px; margin: 20px 0;">
-                    <div style="margin-bottom: 15px;">
-                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Name:</div>
-                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
-                            <span id="inst-app-name"></span>
-                            <button onclick="copyToClipboard('inst-app-name')" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px 8px;">
-                                📋 Copy
-                            </button>
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Region:</div>
-                        <div style="font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 8px 12px; border-radius: 4px;">
-                            <span id="inst-app-region"></span>
-                        </div>
-                    </div>
-                    <div>
-                        <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Plan:</div>
-                        <div style="font-family: 'Courier New', monospace; color: #22c55e; background: rgba(34, 197, 94, 0.1); padding: 8px 12px; border-radius: 4px;">
-                            Free (512MB RAM)
-                        </div>
-                    </div>
-                </div>
+                <textarea 
+                    id="dhis-conf-content" 
+                    style="width: 100%; height: 250px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #e2e8f0; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(100, 116, 139, 0.5); border-radius: 8px; padding: 15px; resize: vertical; line-height: 1.6;"
+                    onclick="this.select()"
+                ></textarea>
             </div>
 
-            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
-                <h3 style="margin-bottom: 25px;">
-                    Step 3: Configure Environment Variables
-                </h3>
-                
-                <p style="color: #cbd5e1; margin-bottom: 20px;">
-                    In the "Environment" section, add these variables one by one:
+            <!-- Environment Variables -->
+            <div style="margin-bottom: 30px;">
+                <h3 style="margin-bottom: 20px;">Environment Variables (Alternative Method)</h3>
+                <p style="color: #cbd5e1; margin-bottom: 15px; font-size: 0.95rem;">
+                    If you prefer to use environment variables instead of dhis.conf, use these values:
                 </p>
-
-                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 20px; margin-bottom: 15px;" id="env-vars-container">
+                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 20px;" id="env-vars-container">
                     <!-- Environment variables will be inserted here -->
-                </div>
-
-                <div class="info-box warning" style="margin-top: 20px;">
-                    <p style="font-size: 0.9rem;">
-                        <strong>⚠️ Important:</strong> Replace <code style="background: rgba(234, 179, 8, 0.2); padding: 2px 6px; border-radius: 3px;">your-database-internal-url</code> with the actual Internal Database URL you copied from Step 1!
-                    </p>
-                </div>
-            </div>
-
-            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
-                <h3 style="margin-bottom: 25px;">
-                    Step 4: Deploy!
-                </h3>
-                
-                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
-                    <li style="margin-bottom: 10px;">Click "Create Web Service"</li>
-                    <li style="margin-bottom: 10px;">Wait 10-15 minutes for the deployment to complete</li>
-                    <li style="margin-bottom: 10px;">Your DHIS2 instance will be available at:</li>
-                </ol>
-
-                <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 15px; margin: 20px 0; text-align: center;">
-                    <div style="font-size: 1.2rem; color: #3b82f6; font-family: 'Courier New', monospace;" id="inst-final-url"></div>
-                </div>
-
-                <div class="credentials-box" style="margin-top: 20px;">
-                    <h4 style="margin-bottom: 15px; color: #22c55e;">Login Credentials</h4>
-                    <div class="credential-row">
-                        <span class="credential-label">Username:</span>
-                        <span style="color: #3b82f6;">admin</span>
-                    </div>
-                    <div class="credential-row">
-                        <span class="credential-label">Password:</span>
-                        <span style="color: #22c55e;">district</span>
-                    </div>
-                </div>
-
-                <div class="info-box warning" style="margin-top: 20px;">
-                    <p style="font-size: 0.9rem;">
-                        <strong>🔐 Security:</strong> Change the admin password immediately after your first login!
-                    </p>
                 </div>
             </div>
 
             <div class="info-box">
-                <h4 style="margin-bottom: 15px;">Free Tier Limitations</h4>
-                <ul style="color: #cbd5e1; padding-left: 20px;">
-                    <li>App spins down after 15 minutes of inactivity</li>
-                    <li>First request after spin-down takes 30-60 seconds</li>
-                    <li>512MB RAM, 1GB Storage</li>
-                    <li>Perfect for testing and development</li>
-                    <li>Upgrade to paid plans anytime for always-on service</li>
-                </ul>
-            </div>
-
-            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
-                <h3 style="margin-bottom: 25px;">
-                    Step 5: dhis.conf Configuration (Alternative to Environment Variables)
-                </h3>
-                
-                <div class="info-box warning" style="margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 10px; color: #fbbf24;">Important: Choose One Method</h4>
-                    <p style="color: #cbd5e1; font-size: 0.95rem;">
-                        You can configure DHIS2 using <strong>either</strong>:
-                        <br>• <strong>Environment Variables</strong> (Step 3 above) - Recommended for Render
-                        <br>• <strong>dhis.conf file</strong> (This step) - For advanced users
-                        <br><br>
-                        Most users should use environment variables (Step 3) and skip this section.
-                    </p>
-                </div>
-
-                <p style="color: #cbd5e1; margin-bottom: 20px;">
-                    If you prefer using a <code style="background: rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 3px;">dhis.conf</code> file instead of environment variables, enter your Database Internal URL below to generate the configuration.
+                <h4 style="margin-bottom: 15px; color: #3b82f6;">📦 Deployment Options</h4>
+                <p style="color: #cbd5e1; margin-bottom: 15px; font-size: 0.95rem;">
+                    <strong>Option 1: Using Dockerfile + dhis.conf (Recommended)</strong>
                 </p>
-
-                <div class="form-group">
-                    <label class="form-label">Database Internal URL</label>
-                    <input type="text" id="db-internal-url" class="form-input" placeholder="postgresql://user:pass@host:5432/dbname" oninput="updateDhisConf()">
-                    <p class="form-hint">Paste your database Internal URL from Step 1</p>
-                </div>
-
-                <div id="dhis-conf-display" style="display: none; margin-top: 20px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <label class="form-label" style="margin: 0;">Your dhis.conf Configuration</label>
-                        <button class="btn-secondary" onclick="downloadDhisConf()">
-                            📥 Download dhis.conf
-                        </button>
-                    </div>
-                    <textarea 
-                        id="dhis-conf-content" 
-                        readonly
-                        style="width: 100%; height: 400px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #e2e8f0; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(100, 116, 139, 0.5); border-radius: 8px; padding: 15px; resize: vertical; line-height: 1.6;"
-                        onclick="this.select()"
-                    ></textarea>
-                    <p class="form-hint" style="margin-top: 8px;">Click the text area to select all, then copy.</p>
-
-                    <div class="info-box" style="margin-top: 20px;">
-                        <h4 style="margin-bottom: 15px; color: #3b82f6;">📁 Where to place dhis.conf</h4>
-                        <p style="color: #cbd5e1; margin-bottom: 15px;">
-                            The <code style="background: rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 3px;">dhis.conf</code> file must be placed in the DHIS2 home directory inside the container:
-                        </p>
-                        <div style="background: rgba(15, 23, 42, 0.8); border-radius: 6px; padding: 12px; margin-bottom: 15px;">
-                            <code style="color: #22c55e; font-size: 0.9rem;">/opt/dhis2/dhis.conf</code>
-                        </div>
-                        <p style="color: #cbd5e1; margin-bottom: 15px; font-size: 0.95rem;">
-                            <strong>For Render deployment, you have two options:</strong>
-                        </p>
-                        <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8; font-size: 0.95rem;">
-                            <li style="margin-bottom: 10px;">
-                                <strong style="color: #22c55e;">Use Environment Variables (Recommended)</strong><br>
-                                Use the environment variables from Step 3. Render will automatically configure DHIS2.
-                            </li>
-                            <li style="margin-bottom: 10px;">
-                                <strong style="color: #fbbf24;">Create a Custom Docker Image</strong><br>
-                                Build your own Docker image that includes the dhis.conf file:
-                                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 6px; padding: 12px; margin-top: 10px; font-family: 'Courier New', monospace; font-size: 0.85rem;">
-<span style="color: #94a3b8;"># Dockerfile</span>
-FROM dhis2/core:${appConfig.dhis2Version}
-COPY dhis.conf /opt/dhis2/dhis.conf
-                                </div>
-                            </li>
-                        </ol>
-                        <div style="background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 6px; padding: 12px; margin-top: 15px;">
-                            <p style="color: #fbbf24; font-size: 0.9rem; margin: 0;">
-                                <strong>💡 Recommendation:</strong> For Render, stick with environment variables (Step 3) unless you have a specific reason to use dhis.conf.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="dhis-conf-placeholder" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 20px; text-align: center; color: #94a3b8;">
-                    <p>👆 Enter your Database Internal URL above to see your dhis.conf configuration</p>
-                </div>
+                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8; font-size: 0.95rem;">
+                    <li>Download both Dockerfile and dhis.conf above</li>
+                    <li>Create a GitHub repository and upload both files</li>
+                    <li>In Render, choose "Deploy from Git Repository"</li>
+                    <li>Connect your GitHub repo</li>
+                    <li>Render will automatically build and deploy</li>
+                </ol>
+                <p style="color: #cbd5e1; margin: 15px 0; font-size: 0.95rem;">
+                    <strong>Option 2: Using Docker Image + Environment Variables</strong>
+                </p>
+                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8; font-size: 0.95rem;">
+                    <li>In Render, choose "Deploy from Docker Registry"</li>
+                    <li>Use image: <code style="background: rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 3px;">dhis2/core:<span id="docker-version"></span></code></li>
+                    <li>Add all environment variables shown above</li>
+                </ol>
             </div>
 
             <div style="display: flex; gap: 15px; margin-top: 30px;">
-                <button class="btn-secondary" style="flex: 1;" onclick="downloadInstructions()">
-                    📄 Download Instructions
+                <button class="btn-secondary" style="flex: 1;" onclick="downloadAll()">
+                    📦 Download All Files
                 </button>
                 <button class="btn btn-primary" style="flex: 1;" onclick="window.open('https://dashboard.render.com', '_blank')">
                     🚀 Go to Render Dashboard
@@ -720,19 +492,14 @@ COPY dhis.conf /opt/dhis2/dhis.conf
             dbName: 'dhis2_db',
             dbUser: 'dhis2_user',
             dbPassword: '',
-            encryptionKey: ''
+            encryptionKey: '',
+            dbInternalUrl: ''
         };
 
         // Initialize
         function init() {
             generatePassword('db-password');
             generatePassword('encryption-key');
-        }
-
-        // Start configuration
-        function startConfiguration() {
-            document.getElementById('step-setup').classList.add('step-hidden');
-            document.getElementById('step-config').classList.remove('step-hidden');
         }
 
         // Generate secure password
@@ -745,9 +512,9 @@ COPY dhis.conf /opt/dhis2/dhis.conf
             document.getElementById(fieldId).value = password;
         }
 
-        // Generate instructions
-        function generateInstructions() {
-            // Get values
+        // Generate deployment files
+        function generateDeploymentFiles() {
+            // Get all values
             appConfig.appName = document.getElementById('app-name').value || 'dhis2-health';
             appConfig.dhis2Version = document.getElementById('dhis2-version').value;
             appConfig.region = document.getElementById('region').value;
@@ -755,10 +522,15 @@ COPY dhis.conf /opt/dhis2/dhis.conf
             appConfig.dbUser = document.getElementById('db-user').value;
             appConfig.dbPassword = document.getElementById('db-password').value;
             appConfig.encryptionKey = document.getElementById('encryption-key').value;
+            appConfig.dbInternalUrl = document.getElementById('db-internal-url').value.trim();
 
             // Validate
             if (!appConfig.appName) {
                 alert('Please enter an application name');
+                return;
+            }
+            if (!appConfig.dbInternalUrl) {
+                alert('Please enter your Database Internal URL');
                 return;
             }
             if (!appConfig.dbPassword) {
@@ -770,30 +542,74 @@ COPY dhis.conf /opt/dhis2/dhis.conf
                 return;
             }
 
-            // Clean app name
             const cleanName = appConfig.appName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
-            
-            // Fill in summary
+
+            // Parse the PostgreSQL URL
+            let parsedDb = {
+                host: '',
+                port: '5432',
+                database: appConfig.dbName,
+                username: appConfig.dbUser,
+                password: appConfig.dbPassword
+            };
+
+            try {
+                const urlMatch = appConfig.dbInternalUrl.match(/postgresql:\/\/([^:]+):([^@]+)@([^:\/]+):?(\d+)?\/(.+)/);
+                if (urlMatch) {
+                    parsedDb.username = urlMatch[1];
+                    parsedDb.password = urlMatch[2];
+                    parsedDb.host = urlMatch[3];
+                    parsedDb.port = urlMatch[4] || '5432';
+                    parsedDb.database = urlMatch[5];
+                }
+            } catch (e) {
+                console.error('Error parsing database URL', e);
+            }
+
+            // Update summary
             document.getElementById('summary-app-name').textContent = cleanName;
             document.getElementById('summary-version').textContent = appConfig.dhis2Version;
             document.getElementById('summary-db-name').textContent = appConfig.dbName;
-            document.getElementById('summary-region').textContent = appConfig.region;
+            document.getElementById('summary-url').textContent = `https://${cleanName}.onrender.com`;
+            document.getElementById('docker-version').textContent = appConfig.dhis2Version;
 
-            // Fill in Step 1 - Database
-            document.getElementById('inst-db-name').textContent = cleanName + '-db';
-            document.getElementById('inst-db-database').textContent = appConfig.dbName;
-            document.getElementById('inst-db-user').textContent = appConfig.dbUser;
-            document.getElementById('inst-db-password').textContent = appConfig.dbPassword;
-            document.getElementById('inst-region').textContent = appConfig.region;
+            // Generate Dockerfile
+            const dockerfile = `FROM dhis2/core:${appConfig.dhis2Version}
 
-            // Fill in Step 2 - Web Service
-            document.getElementById('inst-docker-image').textContent = `dhis2/core:${appConfig.dhis2Version}`;
-            document.getElementById('inst-app-name').textContent = cleanName;
-            document.getElementById('inst-app-region').textContent = appConfig.region;
+# Copy dhis.conf to DHIS2 home directory
+COPY dhis.conf /opt/dhis2/dhis.conf
 
-            // Fill in Step 3 - Environment Variables
+# Expose DHIS2 port
+EXPOSE 8080
+
+# Start DHIS2
+CMD ["catalina.sh", "run"]`;
+
+            document.getElementById('dockerfile-content').value = dockerfile;
+
+            // Generate dhis.conf
+            const dhisConf = `# Database Configuration
+connection.dialect = org.hibernate.dialect.PostgreSQLDialect
+connection.driver_class = org.postgresql.Driver
+connection.url = jdbc:postgresql://${parsedDb.host}:${parsedDb.port}/${parsedDb.database}
+connection.username = ${parsedDb.username}
+connection.password = ${parsedDb.password}
+
+# Server Configuration
+server.base.url = https://${cleanName}.onrender.com
+
+# File Storage
+filestore.provider = filesystem
+filestore.container = files
+
+# Security
+encryption.password = ${appConfig.encryptionKey}`;
+
+            document.getElementById('dhis-conf-content').value = dhisConf;
+
+            // Generate environment variables
             const envVars = [
-                { key: 'DHIS2_DATABASE_HOST', value: 'your-database-internal-url', editable: true, note: 'Paste the Internal Database URL from Step 1 into the field above' },
+                { key: 'DHIS2_DATABASE_HOST', value: appConfig.dbInternalUrl },
                 { key: 'DHIS2_DATABASE_NAME', value: appConfig.dbName },
                 { key: 'DHIS2_DATABASE_USERNAME', value: appConfig.dbUser },
                 { key: 'DHIS2_DATABASE_PASSWORD', value: appConfig.dbPassword, sensitive: true },
@@ -813,45 +629,56 @@ COPY dhis.conf /opt/dhis2/dhis.conf
                     </div>
                     <div>
                         <div style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Value</div>
-                        ${env.editable ? `
-                            <input 
-                                type="text" 
-                                id="env-input-${idx}"
-                                value="${env.value}"
-                                placeholder="Paste your database URL here"
-                                style="width: 100%; font-family: 'Courier New', monospace; color: #3b82f6; background: rgba(59, 130, 246, 0.1); border: 2px solid rgba(59, 130, 246, 0.4); padding: 10px 12px; border-radius: 6px; font-size: 0.9rem; transition: all 0.2s;"
-                                onfocus="this.style.borderColor='rgba(59, 130, 246, 0.6)'; this.select();"
-                                onblur="this.style.borderColor='rgba(59, 130, 246, 0.4)';"
-                            />
-                        ` : `
-                            <div style="font-family: 'Courier New', monospace; color: ${env.sensitive ? '#22c55e' : '#3b82f6'}; background: ${env.sensitive ? 'rgba(34, 197, 94, 0.1)' : 'rgba(59, 130, 246, 0.1)'}; border: 1px solid ${env.sensitive ? 'rgba(34, 197, 94, 0.3)' : 'rgba(59, 130, 246, 0.3)'}; padding: 10px 12px; border-radius: 6px; word-break: break-all; font-size: 0.9rem; user-select: all;">
-                                ${env.value}
-                            </div>
-                        `}
+                        <div style="font-family: 'Courier New', monospace; color: ${env.sensitive ? '#22c55e' : '#3b82f6'}; background: ${env.sensitive ? 'rgba(34, 197, 94, 0.1)' : 'rgba(59, 130, 246, 0.1)'}; border: 1px solid ${env.sensitive ? 'rgba(34, 197, 94, 0.3)' : 'rgba(59, 130, 246, 0.3)'}; padding: 10px 12px; border-radius: 6px; word-break: break-all; font-size: 0.9rem; user-select: all;">
+                            ${env.value}
+                        </div>
                     </div>
-                    ${env.note ? `<div style="background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 6px; padding: 10px 12px; color: #fbbf24; font-size: 0.85rem; margin-top: 10px; display: flex; align-items: start; gap: 8px;"><span style="flex-shrink: 0;">⚠️</span><span>${env.note}</span></div>` : ''}
                 </div>
             `).join('');
 
-            // Fill in Step 4 - Final URL
-            document.getElementById('inst-final-url').textContent = `https://${cleanName}.onrender.com`;
-
-            // Show instructions
+            // Show deployment section
             document.getElementById('step-config').classList.add('step-hidden');
-            document.getElementById('step-instructions').classList.remove('step-hidden');
+            document.getElementById('step-deploy').classList.remove('step-hidden');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Copy to clipboard
-        function copyToClipboard(elementId) {
-            const text = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Copied to clipboard!');
-            }).catch(() => {
-                showToast('Copy failed. Please copy manually.');
-            });
+        // Download Dockerfile
+        function downloadDockerfile() {
+            const content = document.getElementById('dockerfile-content').value;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Dockerfile';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Dockerfile downloaded!');
         }
 
+        // Download dhis.conf
+        function downloadDhisConf() {
+            const content = document.getElementById('dhis-conf-content').value;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dhis.conf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('dhis.conf downloaded!');
+        }
 
+        // Download all files
+        function downloadAll() {
+            downloadDockerfile();
+            setTimeout(() => downloadDhisConf(), 500);
+        }
 
         // Show toast notification
         function showToast(message) {
@@ -876,172 +703,6 @@ COPY dhis.conf /opt/dhis2/dhis.conf
                 toast.style.animation = 'fadeOut 0.3s ease';
                 setTimeout(() => toast.remove(), 300);
             }, 2000);
-        }
-
-        // Update dhis.conf display
-        function updateDhisConf() {
-            const dbUrl = document.getElementById('db-internal-url').value.trim();
-            const confDisplay = document.getElementById('dhis-conf-display');
-            const confPlaceholder = document.getElementById('dhis-conf-placeholder');
-            const confContent = document.getElementById('dhis-conf-content');
-            
-            if (!dbUrl) {
-                confDisplay.style.display = 'none';
-                confPlaceholder.style.display = 'block';
-                return;
-            }
-
-            const cleanName = appConfig.appName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
-
-            // Parse the PostgreSQL URL
-            let parsedDb = {
-                host: '',
-                port: '5432',
-                database: appConfig.dbName,
-                username: appConfig.dbUser,
-                password: appConfig.dbPassword
-            };
-
-            try {
-                // Format: postgresql://user:pass@host:port/database or postgresql://user:pass@host/database
-                const urlMatch = dbUrl.match(/postgresql:\/\/([^:]+):([^@]+)@([^:\/]+):?(\d+)?\/(.+)/);
-                if (urlMatch) {
-                    parsedDb.username = urlMatch[1];
-                    parsedDb.password = urlMatch[2];
-                    parsedDb.host = urlMatch[3];
-                    parsedDb.port = urlMatch[4] || '5432';
-                    parsedDb.database = urlMatch[5];
-                }
-            } catch (e) {
-                console.error('Error parsing database URL', e);
-            }
-
-            const dhisConf = `# Database Configuration
-connection.dialect = org.hibernate.dialect.PostgreSQLDialect
-connection.driver_class = org.postgresql.Driver
-connection.url = jdbc:postgresql://${parsedDb.host}:${parsedDb.port}/${parsedDb.database}
-connection.username = ${parsedDb.username}
-connection.password = ${parsedDb.password}
-
-# Server Configuration
-server.base.url = https://${cleanName}.onrender.com
-
-# File Storage
-filestore.provider = filesystem
-filestore.container = files
-
-# Security
-encryption.password = ${appConfig.encryptionKey}
-`;
-
-            confContent.value = dhisConf;
-            confDisplay.style.display = 'block';
-            confPlaceholder.style.display = 'none';
-        }
-
-        // Download dhis.conf
-        function downloadDhisConf() {
-            const confContent = document.getElementById('dhis-conf-content').value;
-            
-            if (!confContent) {
-                alert('Please enter your Database Internal URL first!');
-                return;
-            }
-
-            const blob = new Blob([confContent], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'dhis.conf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showToast('dhis.conf downloaded!');
-        }
-
-        // Download instructions
-        function downloadInstructions() {
-            const cleanName = appConfig.appName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
-            
-            const instructions = `DHIS2 Deployment Instructions for Render
-============================================
-
-Configuration Summary:
-- App Name: ${cleanName}
-- DHIS2 Version: ${appConfig.dhis2Version}
-- Database Name: ${appConfig.dbName}
-- Region: ${appConfig.region}
-
-STEP 1: Create PostgreSQL Database
------------------------------------
-1. Go to https://dashboard.render.com/new/database
-2. Fill in the details:
-   - Name: ${cleanName}-db
-   - Database: ${appConfig.dbName}
-   - User: ${appConfig.dbUser}
-   - Password: ${appConfig.dbPassword}
-   - Region: ${appConfig.region}
-3. Select "Free" plan
-4. Click "Create Database"
-5. IMPORTANT: Copy the "Internal Database URL" for the next step
-
-STEP 2: Create Web Service
----------------------------
-1. Go to https://dashboard.render.com/select-repo?type=web
-2. Choose "Deploy an existing image from a registry"
-3. Docker Image: dhis2/core:${appConfig.dhis2Version}
-4. Configure:
-   - Name: ${cleanName}
-   - Region: ${appConfig.region}
-   - Plan: Free (512MB RAM)
-
-STEP 3: Configure Environment Variables
-----------------------------------------
-Add these environment variables:
-
-DHIS2_DATABASE_HOST=your-database-internal-url
-(Replace with the Internal Database URL from Step 1)
-
-DHIS2_DATABASE_NAME=${appConfig.dbName}
-DHIS2_DATABASE_USERNAME=${appConfig.dbUser}
-DHIS2_DATABASE_PASSWORD=${appConfig.dbPassword}
-DHIS2_ENCRYPTION_KEY=${appConfig.encryptionKey}
-DHIS2_SERVER_BASE_URL=https://${cleanName}.onrender.com
-DHIS2_SERVER_HTTPS=on
-
-STEP 4: Deploy
---------------
-1. Click "Create Web Service"
-2. Wait 10-15 minutes for deployment
-3. Your DHIS2 will be at: https://${cleanName}.onrender.com
-
-Login Credentials:
-- Username: admin
-- Password: district
-⚠️ CHANGE THIS PASSWORD IMMEDIATELY AFTER FIRST LOGIN!
-
-Free Tier Notes:
-- App spins down after 15 minutes of inactivity
-- First request after spin-down takes 30-60 seconds
-- 512MB RAM, 1GB Storage
-- Perfect for testing and development
-
-Need help? Visit https://docs.dhis2.org
-`;
-
-            const blob = new Blob([instructions], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `dhis2-${cleanName}-deployment-instructions.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showToast('Instructions downloaded!');
         }
 
         // Initialize on load
