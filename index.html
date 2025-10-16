@@ -384,96 +384,154 @@
 
         <!-- Step 2: Deployment Files -->
         <div id="step-deploy" class="card step-hidden">
-            <h2 style="margin-bottom: 30px; text-align: center;">Step 2: Deploy to Render</h2>
+            <h2 style="margin-bottom: 30px; text-align: center;">Step 2: Deploy Your DHIS2</h2>
 
             <div class="info-box success">
                 <h4 style="margin-bottom: 10px;">✅ Configuration Complete!</h4>
                 <p style="color: #cbd5e1; font-size: 0.95rem;">
-                    All your configuration files are ready. Use the files below to deploy DHIS2.
+                    All your files are ready. Choose your deployment method below.
                 </p>
             </div>
 
-            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
-                <h3 style="margin-bottom: 25px;">Configuration Summary</h3>
+            <!-- Configuration Summary -->
+            <div style="background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 25px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 20px;">📋 Your Configuration</h3>
                 <div style="font-family: 'Courier New', monospace; font-size: 0.9rem;">
-                    <div style="margin: 5px 0;"><span style="color: #94a3b8;">App Name:</span> <span id="summary-app-name" style="color: #3b82f6;"></span></div>
-                    <div style="margin: 5px 0;"><span style="color: #94a3b8;">DHIS2 Version:</span> <span id="summary-version" style="color: #22c55e;"></span></div>
-                    <div style="margin: 5px 0;"><span style="color: #94a3b8;">Database:</span> <span id="summary-db-name" style="color: #3b82f6;"></span></div>
-                    <div style="margin: 5px 0;"><span style="color: #94a3b8;">Your URL:</span> <span id="summary-url" style="color: #22c55e;"></span></div>
+                    <div style="margin: 8px 0;"><span style="color: #94a3b8;">App Name:</span> <span id="summary-app-name" style="color: #3b82f6;"></span></div>
+                    <div style="margin: 8px 0;"><span style="color: #94a3b8;">DHIS2 Version:</span> <span id="summary-version" style="color: #22c55e;"></span></div>
+                    <div style="margin: 8px 0;"><span style="color: #94a3b8;">Database:</span> <span id="summary-db-name" style="color: #3b82f6;"></span></div>
+                    <div style="margin: 8px 0;"><span style="color: #94a3b8;">Your URL:</span> <span id="summary-url" style="color: #22c55e;"></span></div>
                 </div>
             </div>
 
-            <!-- Dockerfile -->
-            <div style="margin-bottom: 30px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label class="form-label" style="margin: 0;">📄 Dockerfile</label>
-                    <button class="btn-secondary" onclick="downloadDockerfile()">
-                        📥 Download
-                    </button>
+            <!-- Method 1: Environment Variables (RECOMMENDED) -->
+            <div style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%); border: 2px solid rgba(34, 197, 94, 0.5); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <h3 style="margin: 0;">🚀 Method 1: Quick Deploy (Recommended)</h3>
+                    <span style="background: rgba(34, 197, 94, 0.3); color: #22c55e; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">EASIEST</span>
                 </div>
-                <textarea 
-                    id="dockerfile-content" 
-                    style="width: 100%; height: 200px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #e2e8f0; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(100, 116, 139, 0.5); border-radius: 8px; padding: 15px; resize: vertical; line-height: 1.6;"
-                    onclick="this.select()"
-                ></textarea>
-            </div>
-
-            <!-- dhis.conf -->
-            <div style="margin-bottom: 30px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label class="form-label" style="margin: 0;">⚙️ dhis.conf</label>
-                    <button class="btn-secondary" onclick="downloadDhisConf()">
-                        📥 Download
-                    </button>
+                
+                <div class="info-box success" style="margin-bottom: 25px;">
+                    <h4 style="margin-bottom: 10px; color: #22c55e;">✅ No GitHub Required!</h4>
+                    <p style="color: #cbd5e1; font-size: 0.95rem;">
+                        Use the official DHIS2 Docker image + environment variables. Just copy and paste!
+                    </p>
                 </div>
-                <textarea 
-                    id="dhis-conf-content" 
-                    style="width: 100%; height: 250px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #e2e8f0; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(100, 116, 139, 0.5); border-radius: 8px; padding: 15px; resize: vertical; line-height: 1.6;"
-                    onclick="this.select()"
-                ></textarea>
-            </div>
 
-            <!-- Environment Variables -->
-            <div style="margin-bottom: 30px;">
-                <h3 style="margin-bottom: 20px;">Environment Variables (Alternative Method)</h3>
-                <p style="color: #cbd5e1; margin-bottom: 15px; font-size: 0.95rem;">
-                    If you prefer to use environment variables instead of dhis.conf, use these values:
-                </p>
+                <h4 style="margin-bottom: 15px; color: #e2e8f0;">Step-by-Step Instructions:</h4>
+                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 2; font-size: 0.95rem; margin-bottom: 25px;">
+                    <li>Click the button below to open Render</li>
+                    <li>Choose <strong>"Deploy from Docker Registry"</strong></li>
+                    <li>Paste this Docker image: <code style="background: rgba(59, 130, 246, 0.2); padding: 3px 8px; border-radius: 4px; color: #3b82f6;">dhis2/core:<span id="docker-version-1"></span></code></li>
+                    <li>Service name: <strong id="quick-app-name" style="color: #3b82f6;"></strong></li>
+                    <li>Region: <strong id="quick-region" style="color: #22c55e;"></strong></li>
+                    <li>Plan: <strong style="color: #22c55e;">Free</strong></li>
+                    <li>Scroll to "Environment Variables" section</li>
+                    <li>Copy each variable below (click to copy)</li>
+                    <li>Click "Create Web Service"</li>
+                    <li>Wait 10-15 minutes ☕ - Done!</li>
+                </ol>
+
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 25px;" onclick="window.open('https://dashboard.render.com/select-repo?type=web', '_blank')">
+                    🚀 Open Render Dashboard
+                </button>
+
+                <h4 style="margin-bottom: 15px; color: #e2e8f0;">Environment Variables to Copy:</h4>
                 <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 20px;" id="env-vars-container">
                     <!-- Environment variables will be inserted here -->
                 </div>
             </div>
 
-            <div class="info-box">
-                <h4 style="margin-bottom: 15px; color: #3b82f6;">📦 Deployment Options</h4>
-                <p style="color: #cbd5e1; margin-bottom: 15px; font-size: 0.95rem;">
-                    <strong>Option 1: Using Dockerfile + dhis.conf (Recommended)</strong>
+            <!-- Method 2: Custom Dockerfile -->
+            <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(100, 116, 139, 0.3); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <h3 style="margin: 0;">🔧 Method 2: Custom Docker Image</h3>
+                    <span style="background: rgba(234, 179, 8, 0.2); color: #fbbf24; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">ADVANCED</span>
+                </div>
+
+                <p style="color: #cbd5e1; margin-bottom: 20px; font-size: 0.95rem;">
+                    Use this method if you need a custom Dockerfile with dhis.conf baked in.
                 </p>
-                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8; font-size: 0.95rem;">
-                    <li>Download both Dockerfile and dhis.conf above</li>
-                    <li>Create a GitHub repository and upload both files</li>
-                    <li>In Render, choose "Deploy from Git Repository"</li>
-                    <li>Connect your GitHub repo</li>
-                    <li>Render will automatically build and deploy</li>
-                </ol>
-                <p style="color: #cbd5e1; margin: 15px 0; font-size: 0.95rem;">
-                    <strong>Option 2: Using Docker Image + Environment Variables</strong>
-                </p>
-                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8; font-size: 0.95rem;">
-                    <li>In Render, choose "Deploy from Docker Registry"</li>
-                    <li>Use image: <code style="background: rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 3px;">dhis2/core:<span id="docker-version"></span></code></li>
-                    <li>Add all environment variables shown above</li>
-                </ol>
+
+                <div style="margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label class="form-label" style="margin: 0;">📄 Dockerfile</label>
+                        <button class="btn-secondary" onclick="downloadDockerfile()">📥 Download</button>
+                    </div>
+                    <textarea 
+                        id="dockerfile-content" 
+                        style="width: 100%; height: 180px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #e2e8f0; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(100, 116, 139, 0.5); border-radius: 8px; padding: 15px; resize: vertical; line-height: 1.6;"
+                        onclick="this.select()"
+                    ></textarea>
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label class="form-label" style="margin: 0;">⚙️ dhis.conf</label>
+                        <button class="btn-secondary" onclick="downloadDhisConf()">📥 Download</button>
+                    </div>
+                    <textarea 
+                        id="dhis-conf-content" 
+                        style="width: 100%; height: 220px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #e2e8f0; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(100, 116, 139, 0.5); border-radius: 8px; padding: 15px; resize: vertical; line-height: 1.6;"
+                        onclick="this.select()"
+                    ></textarea>
+                </div>
+
+                <div class="info-box" style="margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px;">How to deploy:</h4>
+                    <ol style="color: #cbd5e1; padding-left: 20px; line-height: 1.8; font-size: 0.9rem;">
+                        <li>Download both files above</li>
+                        <li>Create a GitHub repository</li>
+                        <li>Upload both files to the repo</li>
+                        <li>In Render, choose "Deploy from Git Repository"</li>
+                        <li>Connect your GitHub repo</li>
+                    </ol>
+                </div>
+
+                <button class="btn-secondary" style="width: 100%;" onclick="downloadAll()">
+                    📦 Download Both Files
+                </button>
             </div>
 
-            <div style="display: flex; gap: 15px; margin-top: 30px;">
-                <button class="btn-secondary" style="flex: 1;" onclick="downloadAll()">
-                    📦 Download All Files
+            <!-- Method 3: Local Setup -->
+            <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(100, 116, 139, 0.3); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 20px;">🖥️ Method 3: Run Locally</h3>
+                
+                <p style="color: #cbd5e1; margin-bottom: 20px; font-size: 0.95rem;">
+                    Test DHIS2 on your computer with Docker Desktop. Perfect for development!
+                </p>
+
+                <div class="info-box" style="margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px;">Requirements:</h4>
+                    <ul style="color: #cbd5e1; padding-left: 20px; line-height: 1.8; font-size: 0.9rem;">
+                        <li>Docker Desktop installed</li>
+                        <li>4GB RAM available</li>
+                        <li>10GB disk space</li>
+                    </ul>
+                </div>
+
+                <button class="btn-secondary" style="width: 100%;" onclick="downloadDockerCompose()">
+                    📥 Download Local Setup Package
                 </button>
-                <button class="btn btn-primary" style="flex: 1;" onclick="window.open('https://dashboard.render.com', '_blank')">
-                    🚀 Go to Render Dashboard
-                </button>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 10px; text-align: center;">
+                    Includes docker-compose.yml, instructions, and everything you need
+                </p>
             </div>
+
+            <!-- Final Actions -->
+            <div class="info-box warning">
+                <h4 style="margin-bottom: 10px; color: #fbbf24;">⚠️ Important Reminders</h4>
+                <ul style="color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
+                    <li>Default login: <strong>admin / district</strong></li>
+                    <li>Change password immediately after first login!</li>
+                    <li>Free tier spins down after 15 minutes of inactivity</li>
+                    <li>First request after spin-down takes 30-60 seconds</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="window.location.reload()">
+                ← Start New Deployment
+            </button>
         </div>
 
         <!-- Footer -->
@@ -571,7 +629,10 @@
             document.getElementById('summary-version').textContent = appConfig.dhis2Version;
             document.getElementById('summary-db-name').textContent = appConfig.dbName;
             document.getElementById('summary-url').textContent = `https://${cleanName}.onrender.com`;
-            document.getElementById('docker-version').textContent = appConfig.dhis2Version;
+            document.getElementById('docker-version-1').textContent = appConfig.dhis2Version;
+            document.getElementById('docker-version-2').textContent = appConfig.dhis2Version;
+            document.getElementById('quick-app-name').textContent = cleanName;
+            document.getElementById('quick-region').textContent = appConfig.region;
 
             // Generate Dockerfile
             const dockerfile = `FROM dhis2/core:${appConfig.dhis2Version}
@@ -678,6 +739,169 @@ encryption.password = ${appConfig.encryptionKey}`;
         function downloadAll() {
             downloadDockerfile();
             setTimeout(() => downloadDhisConf(), 500);
+        }
+
+        // Download docker-compose for local setup
+        function downloadDockerCompose() {
+            const cleanName = appConfig.appName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+            
+            const dockerCompose = `version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgis/postgis:15-3.3-alpine
+    container_name: dhis2-postgres
+    environment:
+      POSTGRES_USER: ${appConfig.dbUser}
+      POSTGRES_PASSWORD: ${appConfig.dbPassword}
+      POSTGRES_DB: ${appConfig.dbName}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${appConfig.dbUser}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # DHIS2 Application
+  dhis2:
+    build: .
+    container_name: dhis2-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DHIS2_DATABASE_HOST=postgres
+      - DHIS2_DATABASE_PORT=5432
+      - DHIS2_DATABASE_NAME=${appConfig.dbName}
+      - DHIS2_DATABASE_USERNAME=${appConfig.dbUser}
+      - DHIS2_DATABASE_PASSWORD=${appConfig.dbPassword}
+      - DHIS2_ENCRYPTION_KEY=${appConfig.encryptionKey}
+    volumes:
+      - dhis2-data:/opt/dhis2
+
+volumes:
+  postgres-data:
+  dhis2-data:
+`;
+
+            const readme = `# DHIS2 Local Setup
+
+## Prerequisites
+- Docker Desktop installed
+- At least 4GB RAM available
+- At least 10GB disk space
+
+## Quick Start
+
+1. Place these files in a folder:
+   - Dockerfile
+   - dhis.conf
+   - docker-compose.yml (this file)
+
+2. Open terminal in that folder
+
+3. Start DHIS2:
+   \`\`\`bash
+   docker-compose up -d
+   \`\`\`
+
+4. Wait 2-3 minutes for initialization
+
+5. Access DHIS2:
+   - URL: http://localhost:8080
+   - Username: admin
+   - Password: district
+
+## Commands
+
+Start DHIS2:
+\`\`\`bash
+docker-compose up -d
+\`\`\`
+
+Stop DHIS2:
+\`\`\`bash
+docker-compose down
+\`\`\`
+
+View logs:
+\`\`\`bash
+docker-compose logs -f dhis2
+\`\`\`
+
+Restart DHIS2:
+\`\`\`bash
+docker-compose restart dhis2
+\`\`\`
+
+Remove everything (including data):
+\`\`\`bash
+docker-compose down -v
+\`\`\`
+
+## Troubleshooting
+
+**DHIS2 won't start:**
+- Check Docker Desktop is running
+- Ensure ports 8080 and 5432 are not in use
+- Check logs: \`docker-compose logs dhis2\`
+
+**Database connection failed:**
+- Wait for PostgreSQL to fully start (check logs)
+- Verify dhis.conf has correct database settings
+
+**Out of memory:**
+- Increase Docker Desktop memory to at least 4GB
+- Settings → Resources → Memory
+
+## Configuration
+
+- App Name: ${cleanName}
+- DHIS2 Version: ${appConfig.dhis2Version}
+- Database: ${appConfig.dbName}
+- Database User: ${appConfig.dbUser}
+
+⚠️ **Security Note:** Change the admin password immediately after first login!
+
+## Data Persistence
+
+Your data is stored in Docker volumes:
+- \`postgres-data\` - Database
+- \`dhis2-data\` - DHIS2 files
+
+Data persists even when containers are stopped.
+`;
+
+            // Create a zip-like download with instructions
+            const combinedContent = `${readme}
+
+===== docker-compose.yml =====
+${dockerCompose}
+
+===== Setup Instructions =====
+1. Download the Dockerfile and dhis.conf from the main page
+2. Save the docker-compose.yml content above to a file named "docker-compose.yml"
+3. Place all three files in the same folder
+4. Follow the Quick Start instructions above
+`;
+
+            const blob = new Blob([combinedContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'LOCAL-SETUP-INSTRUCTIONS.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Local setup instructions downloaded!');
         }
 
         // Show toast notification
