@@ -260,12 +260,17 @@
 
         <!-- Step 1: Complete Configuration -->
         <div id="step-config" class="card">
-            <h2 style="margin-bottom: 30px; text-align: center;">Step 1: Complete Configuration</h2>
+            <h2 style="margin-bottom: 30px; text-align: center;">Step 1: Basic Configuration</h2>
 
-            <div class="info-box">
-                <h4 style="margin-bottom: 10px;">📋 What You'll Need</h4>
-                <p style="color: #cbd5e1; font-size: 0.95rem;">
-                    Fill in ALL configuration details below. We'll generate everything you need for deployment.
+            <div class="info-box warning">
+                <h4 style="margin-bottom: 10px; color: #fbbf24;">⚠️ Important: Two-Step Process</h4>
+                <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+                    <strong>You cannot generate the dhis.conf yet</strong> because you need the Database Internal URL first!<br><br>
+                    <strong>The Process:</strong><br>
+                    1️⃣ Fill in basic details below<br>
+                    2️⃣ Create database on Render<br>
+                    3️⃣ Come back and paste the Database URL<br>
+                    4️⃣ Then generate all files with correct configuration
                 </p>
             </div>
 
@@ -279,7 +284,7 @@
             <div class="form-group">
                 <label class="form-label">Application Name *</label>
                 <input type="text" id="app-name" class="form-input" placeholder="my-dhis2-app" value="dhis2-health">
-                <p class="form-hint">Lowercase letters, numbers, and hyphens only. This will be your app's URL.</p>
+                <p class="form-hint">This will be your app's URL: https://[app-name].onrender.com</p>
             </div>
 
             <div class="grid-2">
@@ -309,28 +314,12 @@
                     <line x1="2" y1="12" x2="22" y2="12"></line>
                     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                 </svg>
-                Database Configuration
+                Database Details (For Creating Database)
             </h3>
-
-            <div class="info-box warning">
-                <p style="font-size: 0.95rem; color: #fbbf24;">
-                    <strong>⚠️ Important:</strong> First, create your database on Render, then paste the Internal Database URL below.
-                </p>
-                <button class="btn-secondary" style="width: 100%; margin-top: 15px;" onclick="window.open('https://dashboard.render.com/new/database', '_blank')">
-                    🗄️ Create Database on Render First
-                </button>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Database Internal URL *</label>
-                <input type="text" id="db-internal-url" class="form-input" placeholder="postgresql://user:pass@host:5432/dbname">
-                <p class="form-hint">After creating database on Render, copy the "Internal Database URL" and paste it here</p>
-            </div>
 
             <div class="form-group">
                 <label class="form-label">Database Name *</label>
                 <input type="text" id="db-name" class="form-input" placeholder="dhis2_db" value="dhis2_db">
-                <p class="form-hint">Name for your PostgreSQL database</p>
             </div>
 
             <div class="grid-2">
@@ -361,7 +350,6 @@
                     <input type="text" id="encryption-key" class="form-input" placeholder="Auto-generated encryption key" readonly>
                     <button class="btn-secondary" onclick="generatePassword('encryption-key')">Generate</button>
                 </div>
-                <p class="form-hint">32-character encryption key for securing sensitive data</p>
             </div>
 
             <div class="info-box">
@@ -373,7 +361,77 @@
                 </p>
             </div>
 
-            <button class="btn btn-primary" onclick="generateDeploymentFiles()" id="generate-btn">
+            <div style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%); border: 2px solid rgba(34, 197, 94, 0.5); border-radius: 12px; padding: 25px; margin: 30px 0;">
+                <h3 style="margin-bottom: 20px;">🗄️ Next: Create Database on Render</h3>
+                <p style="color: #cbd5e1; margin-bottom: 20px; font-size: 0.95rem;">
+                    Now you need to create the PostgreSQL database on Render. We'll use the values above.
+                </p>
+                
+                <div style="background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #22c55e;">📋 Copy These Values for Render:</h4>
+                    <div style="font-family: 'Courier New', monospace; font-size: 0.9rem;">
+                        <div style="margin: 10px 0; padding: 10px; background: rgba(59, 130, 246, 0.1); border-radius: 6px;">
+                            <div style="color: #94a3b8; font-size: 0.8rem;">Name:</div>
+                            <div style="color: #3b82f6; font-weight: 600;" id="preview-db-name">dhis2_db</div>
+                        </div>
+                        <div style="margin: 10px 0; padding: 10px; background: rgba(59, 130, 246, 0.1); border-radius: 6px;">
+                            <div style="color: #94a3b8; font-size: 0.8rem;">Database:</div>
+                            <div style="color: #3b82f6; font-weight: 600;" id="preview-db-database">dhis2_db</div>
+                        </div>
+                        <div style="margin: 10px 0; padding: 10px; background: rgba(59, 130, 246, 0.1); border-radius: 6px;">
+                            <div style="color: #94a3b8; font-size: 0.8rem;">User:</div>
+                            <div style="color: #3b82f6; font-weight: 600;" id="preview-db-user">dhis2_user</div>
+                        </div>
+                        <div style="margin: 10px 0; padding: 10px; background: rgba(34, 197, 94, 0.1); border-radius: 6px;">
+                            <div style="color: #94a3b8; font-size: 0.8rem;">Password:</div>
+                            <div style="color: #22c55e; font-weight: 600; word-break: break-all;" id="preview-db-password"></div>
+                        </div>
+                        <div style="margin: 10px 0; padding: 10px; background: rgba(59, 130, 246, 0.1); border-radius: 6px;">
+                            <div style="color: #94a3b8; font-size: 0.8rem;">Region:</div>
+                            <div style="color: #3b82f6; font-weight: 600;" id="preview-region">oregon</div>
+                        </div>
+                        <div style="margin: 10px 0; padding: 10px; background: rgba(59, 130, 246, 0.1); border-radius: 6px;">
+                            <div style="color: #94a3b8; font-size: 0.8rem;">Plan:</div>
+                            <div style="color: #22c55e; font-weight: 600;">Free</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 15px;" onclick="window.open('https://dashboard.render.com/new/database', '_blank'); showDatabaseWaitingMessage();">
+                    🗄️ Create Database on Render Now
+                </button>
+
+                <div id="waiting-message" style="display: none; background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 8px; padding: 15px; margin-top: 15px;">
+                    <p style="color: #fbbf24; font-size: 0.9rem; margin: 0;">
+                        ⏳ After creating the database, copy the <strong>"Internal Database URL"</strong> and paste it below...
+                    </p>
+                </div>
+            </div>
+
+            <h3 style="margin: 40px 0 20px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                Paste Database Internal URL Here
+            </h3>
+
+            <div class="form-group">
+                <label class="form-label">Database Internal URL *</label>
+                <input type="text" id="db-internal-url" class="form-input" placeholder="postgresql://user:pass@host-internal.render.com:5432/dbname" oninput="checkReadyToGenerate()">
+                <p class="form-hint">After creating the database on Render, copy the "Internal Database URL" and paste here</p>
+            </div>
+
+            <div id="ready-indicator" style="display: none; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 15px; margin-top: 15px;">
+                <p style="color: #22c55e; font-size: 0.95rem; margin: 0; display: flex; align-items: center; gap: 10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span><strong>Ready!</strong> You can now generate all deployment files with the correct database configuration.</span>
+                </p>
+            </div>
+
+            <button class="btn btn-primary" onclick="generateDeploymentFiles()" id="generate-btn" disabled style="margin-top: 20px;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                     <polyline points="14 2 14 8 20 8"></polyline>
@@ -442,7 +500,129 @@
                 </div>
             </div>
 
-            <!-- Method 2: Custom Dockerfile -->
+            <!-- Method 2: Upload & Auto Deploy -->
+            <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border: 2px solid rgba(102, 126, 234, 0.5); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <h3 style="margin: 0;">⚡ Method 2: Build & Deploy via Docker Registry</h3>
+                    <span style="background: rgba(102, 126, 234, 0.3); color: #667eea; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">FOR DEVELOPERS</span>
+                </div>
+
+                <p style="color: #cbd5e1; margin-bottom: 20px; font-size: 0.95rem;">
+                    Build your custom Docker image and push it to Docker Hub, then deploy to Render.
+                </p>
+
+                <div class="info-box" style="margin-bottom: 25px;">
+                    <h4 style="margin-bottom: 10px; color: #3b82f6;">📚 What is Docker Registry?</h4>
+                    <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6;">
+                        A Docker Registry is like GitHub for Docker images. You push your built image there, 
+                        and Render pulls it to deploy. Popular registries:
+                    </p>
+                    <ul style="color: #cbd5e1; margin-top: 10px; padding-left: 20px; font-size: 0.9rem;">
+                        <li><strong>Docker Hub</strong> (hub.docker.com) - Free, 1 private repo</li>
+                        <li><strong>GitHub Container Registry</strong> (ghcr.io) - Free unlimited</li>
+                        <li><strong>Render Registry</strong> - Built-in with Render</li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(15, 23, 42, 0.8); border-radius: 12px; padding: 25px; margin-bottom: 25px;">
+                    <h4 style="margin-bottom: 15px; color: #e2e8f0;">📋 Step-by-Step Instructions</h4>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <div style="color: #22c55e; font-weight: 600; margin-bottom: 10px;">Step 1: Create Docker Hub Account</div>
+                        <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 10px;">
+                            Go to <a href="https://hub.docker.com/signup" target="_blank" style="color: #3b82f6;">hub.docker.com</a> and create a free account
+                        </p>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <div style="color: #22c55e; font-weight: 600; margin-bottom: 10px;">Step 2: Download Your Files</div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-secondary" onclick="downloadDockerfile()">📥 Dockerfile</button>
+                            <button class="btn-secondary" onclick="downloadDhisConf()">📥 dhis.conf</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <div style="color: #22c55e; font-weight: 600; margin-bottom: 10px;">Step 3: Build & Push Image</div>
+                        <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 10px;">
+                            Place both files in a folder and run these commands:
+                        </p>
+                        <div style="background: rgba(0, 0, 0, 0.4); border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #22c55e; margin-bottom: 10px;">
+<span style="color: #94a3b8;"># Login to Docker Hub</span><br>
+docker login<br>
+<br>
+<span style="color: #94a3b8;"># Build your image (replace 'yourusername')</span><br>
+docker build -t <span style="color: #fbbf24;">yourusername</span>/dhis2-custom:latest .<br>
+<br>
+<span style="color: #94a3b8;"># Push to Docker Hub</span><br>
+docker push <span style="color: #fbbf24;">yourusername</span>/dhis2-custom:latest
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.9rem;">Your Docker Hub Username</label>
+                            <input 
+                                type="text" 
+                                id="docker-username" 
+                                class="form-input" 
+                                placeholder="yourusername"
+                                oninput="updateDockerCommands()"
+                                style="font-family: 'Courier New', monospace;"
+                            >
+                        </div>
+                        <div id="personalized-commands" style="display: none; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 15px; margin-top: 10px;">
+                            <p style="color: #22c55e; font-size: 0.85rem; margin-bottom: 10px;">✅ Your personalized commands:</p>
+                            <div style="background: rgba(0, 0, 0, 0.4); border-radius: 6px; padding: 12px; font-family: 'Courier New', monospace; font-size: 0.8rem; color: #22c55e;">
+docker build -t <span id="cmd-username-1"></span>/dhis2-custom:latest .<br>
+docker push <span id="cmd-username-2"></span>/dhis2-custom:latest
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <div style="color: #22c55e; font-weight: 600; margin-bottom: 10px;">Step 4: Deploy to Render</div>
+                        <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 10px;">
+                            In Render, choose "Deploy from Docker Registry" and use:
+                        </p>
+                        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 15px;">
+                            <div style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 5px;">Docker Image:</div>
+                            <div style="font-family: 'Courier New', monospace; color: #3b82f6; font-size: 0.95rem; word-break: break-all;" id="final-docker-image">
+                                yourusername/dhis2-custom:latest
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="color: #22c55e; font-weight: 600; margin-bottom: 10px;">Step 5: Done! 🎉</div>
+                        <p style="color: #cbd5e1; font-size: 0.9rem;">
+                            Render will pull your custom image and deploy DHIS2 with your configuration baked in!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-box warning">
+                    <h4 style="margin-bottom: 10px; color: #fbbf24;">⚠️ Requirements</h4>
+                    <ul style="color: #cbd5e1; padding-left: 20px; font-size: 0.9rem; line-height: 1.8;">
+                        <li>Docker Desktop installed on your computer</li>
+                        <li>Basic command line knowledge</li>
+                        <li>Free Docker Hub account</li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 15px; margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: #22c55e;">✅ Benefits of This Method</h4>
+                    <ul style="color: #cbd5e1; padding-left: 20px; font-size: 0.9rem; line-height: 1.8;">
+                        <li>Your dhis.conf is baked into the image - no manual configuration needed</li>
+                        <li>Faster deployment - Render just pulls the ready image</li>
+                        <li>Can deploy the same image to multiple platforms</li>
+                        <li>No GitHub required</li>
+                    </ul>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="window.open('https://dashboard.render.com/select-repo?type=web', '_blank')">
+                    🚀 Go to Render Dashboard
+                </button>
+            </div>
+
+            <!-- Method 3: Custom Dockerfile (Manual GitHub) -->
             <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(100, 116, 139, 0.3); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
                     <h3 style="margin: 0;">🔧 Method 2: Custom Docker Image</h3>
@@ -558,6 +738,36 @@
         function init() {
             generatePassword('db-password');
             generatePassword('encryption-key');
+            updateDatabasePreview();
+        }
+
+        // Update database preview
+        function updateDatabasePreview() {
+            document.getElementById('preview-db-name').textContent = document.getElementById('db-name').value || 'dhis2_db';
+            document.getElementById('preview-db-database').textContent = document.getElementById('db-name').value || 'dhis2_db';
+            document.getElementById('preview-db-user').textContent = document.getElementById('db-user').value || 'dhis2_user';
+            document.getElementById('preview-db-password').textContent = document.getElementById('db-password').value || '';
+            document.getElementById('preview-region').textContent = document.getElementById('region').value || 'oregon';
+        }
+
+        // Show waiting message
+        function showDatabaseWaitingMessage() {
+            document.getElementById('waiting-message').style.display = 'block';
+        }
+
+        // Check if ready to generate
+        function checkReadyToGenerate() {
+            const dbUrl = document.getElementById('db-internal-url').value.trim();
+            const generateBtn = document.getElementById('generate-btn');
+            const readyIndicator = document.getElementById('ready-indicator');
+            
+            if (dbUrl && dbUrl.startsWith('postgresql://')) {
+                generateBtn.disabled = false;
+                readyIndicator.style.display = 'block';
+            } else {
+                generateBtn.disabled = true;
+                readyIndicator.style.display = 'none';
+            }
         }
 
         // Generate secure password
@@ -902,6 +1112,158 @@ ${dockerCompose}
             URL.revokeObjectURL(url);
             
             showToast('Local setup instructions downloaded!');
+        }
+
+        // Update Docker commands with username
+        function updateDockerCommands() {
+            const username = document.getElementById('docker-username').value.trim();
+            const personalizedDiv = document.getElementById('personalized-commands');
+            
+            if (username) {
+                document.getElementById('cmd-username-1').textContent = username;
+                document.getElementById('cmd-username-2').textContent = username;
+                document.getElementById('final-docker-image').textContent = `${username}/dhis2-custom:latest`;
+                personalizedDiv.style.display = 'block';
+            } else {
+                personalizedDiv.style.display = 'none';
+                document.getElementById('final-docker-image').textContent = 'yourusername/dhis2-custom:latest';
+            }
+        }
+
+        // File upload handling
+        let uploadedFiles = {
+            dockerfile: null,
+            dhisconf: null
+        };
+
+        function handleFileUpload(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const file = input.files[0];
+            const statusId = inputId === 'dockerfile-upload' ? 'dockerfile-status' : 'dhisconf-status';
+            const status = document.getElementById(statusId);
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    document.getElementById(previewId).value = content;
+                    
+                    // Store file content
+                    if (inputId === 'dockerfile-upload') {
+                        uploadedFiles.dockerfile = content;
+                    } else {
+                        uploadedFiles.dhisconf = content;
+                    }
+
+                    status.textContent = `✓ ${file.name} uploaded`;
+                    status.style.color = '#22c55e';
+
+                    // Parse and show detected config
+                    if (uploadedFiles.dockerfile && uploadedFiles.dhisconf) {
+                        parseUploadedFiles();
+                        document.getElementById('upload-preview').style.display = 'block';
+                        
+                        // Enable deploy button if API key is present
+                        const apiKey = document.getElementById('render-api-key').value;
+                        if (apiKey) {
+                            document.getElementById('auto-deploy-btn').disabled = false;
+                        }
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function parseUploadedFiles() {
+            const dhisconf = uploadedFiles.dhisconf;
+            const dockerfile = uploadedFiles.dockerfile;
+
+            // Parse dhis.conf
+            const dbNameMatch = dhisconf.match(/connection\.url\s*=\s*jdbc:postgresql:\/\/[^:]+:\d+\/([^\s\n]+)/);
+            const dbUserMatch = dhisconf.match(/connection\.username\s*=\s*([^\s\n]+)/);
+            const serviceUrlMatch = dhisconf.match(/server\.base\.url\s*=\s*([^\s\n]+)/);
+            
+            // Parse Dockerfile for version
+            const versionMatch = dockerfile.match(/FROM\s+dhis2\/core:([^\s\n]+)/);
+
+            // Display detected values
+            document.getElementById('detected-db-name').textContent = dbNameMatch ? dbNameMatch[1] : 'Not found';
+            document.getElementById('detected-db-user').textContent = dbUserMatch ? dbUserMatch[1] : 'Not found';
+            document.getElementById('detected-service-url').textContent = serviceUrlMatch ? serviceUrlMatch[1] : 'Not found';
+            document.getElementById('detected-dhis-version').textContent = versionMatch ? versionMatch[1] : 'Not found';
+        }
+
+        // Auto deploy to Render
+        async function autoDeployToRender() {
+            const apiKey = document.getElementById('render-api-key').value;
+            
+            if (!apiKey) {
+                alert('Please enter your Render API Key');
+                return;
+            }
+
+            if (!uploadedFiles.dockerfile || !uploadedFiles.dhisconf) {
+                alert('Please upload both Dockerfile and dhis.conf');
+                return;
+            }
+
+            const deployBtn = document.getElementById('auto-deploy-btn');
+            const progressDiv = document.getElementById('deployment-progress');
+            const logsDiv = document.getElementById('deployment-logs');
+
+            deployBtn.disabled = true;
+            deployBtn.innerHTML = '<div class="spinner" style="width: 20px; height: 20px; border: 2px solid #ffffff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></div> Deploying...';
+            progressDiv.style.display = 'block';
+            logsDiv.innerHTML = '';
+
+            function addLog(message, type = 'info') {
+                const color = type === 'error' ? '#ef4444' : type === 'success' ? '#22c55e' : '#3b82f6';
+                logsDiv.innerHTML += `<div style="color: ${color}; margin: 5px 0;">${message}</div>`;
+                logsDiv.scrollTop = logsDiv.scrollHeight;
+            }
+
+            try {
+                addLog('🔐 Validating API key...');
+                
+                // Test API key
+                const testResponse = await fetch('https://api.render.com/v1/owners', {
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!testResponse.ok) {
+                    throw new Error('Invalid API key. Please check your Render API key.');
+                }
+
+                addLog('✅ API key validated', 'success');
+                addLog('');
+                addLog('⚠️ Unfortunately, automatic deployment requires:', 'error');
+                addLog('  1. A GitHub repository with your Dockerfile and dhis.conf', 'error');
+                addLog('  2. The repository to be connected to Render', 'error');
+                addLog('  3. Render does not support direct file uploads via API', 'error');
+                addLog('');
+                addLog('📚 Alternative Solution:', 'info');
+                addLog('  1. Create a GitHub repository', 'info');
+                addLog('  2. Upload your Dockerfile and dhis.conf to the repo', 'info');
+                addLog('  3. Use Method 3 below to deploy from GitHub', 'info');
+                addLog('');
+                addLog('Or use Method 1 (Environment Variables) - No GitHub needed!', 'success');
+
+            } catch (error) {
+                addLog(`❌ Error: ${error.message}`, 'error');
+            } finally {
+                deployBtn.disabled = false;
+                deployBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    <span>Deploy to Render Automatically</span>
+                `;
+            }
         }
 
         // Show toast notification
