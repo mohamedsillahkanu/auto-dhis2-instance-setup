@@ -500,7 +500,7 @@
                 </div>
             </div>
 
-            <!-- Method 2: Upload & Auto Deploy -->
+            <!-- Method 2: Build & Deploy via Docker Registry -->
             <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border: 2px solid rgba(102, 126, 234, 0.5); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
                     <h3 style="margin: 0;">⚡ Method 2: Build & Deploy via Docker Registry</h3>
@@ -625,7 +625,7 @@ docker push <span id="cmd-username-2"></span>/dhis2-custom:latest
             <!-- Method 3: Custom Dockerfile (Manual GitHub) -->
             <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(100, 116, 139, 0.3); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                    <h3 style="margin: 0;">🔧 Method 2: Custom Docker Image</h3>
+                    <h3 style="margin: 0;">🔧 Method 3: Custom Docker Image</h3>
                     <span style="background: rgba(234, 179, 8, 0.2); color: #fbbf24; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">ADVANCED</span>
                 </div>
 
@@ -673,9 +673,9 @@ docker push <span id="cmd-username-2"></span>/dhis2-custom:latest
                 </button>
             </div>
 
-            <!-- Method 3: Local Setup -->
+            <!-- Method 4: Local Setup -->
             <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(100, 116, 139, 0.3); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
-                <h3 style="margin-bottom: 20px;">🖥️ Method 3: Run Locally</h3>
+                <h3 style="margin-bottom: 20px;">🖥️ Method 4: Run Locally</h3>
                 
                 <p style="color: #cbd5e1; margin-bottom: 20px; font-size: 0.95rem;">
                     Test DHIS2 on your computer with Docker Desktop. Perfect for development!
@@ -739,6 +739,12 @@ docker push <span id="cmd-username-2"></span>/dhis2-custom:latest
             generatePassword('db-password');
             generatePassword('encryption-key');
             updateDatabasePreview();
+            
+            // Add input listeners for real-time preview updates
+            document.getElementById('db-name').addEventListener('input', updateDatabasePreview);
+            document.getElementById('db-user').addEventListener('input', updateDatabasePreview);
+            document.getElementById('db-password').addEventListener('input', updateDatabasePreview);
+            document.getElementById('region').addEventListener('change', updateDatabasePreview);
         }
 
         // Update database preview
@@ -778,10 +784,17 @@ docker push <span id="cmd-username-2"></span>/dhis2-custom:latest
                 password += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             document.getElementById(fieldId).value = password;
+            
+            // Update preview if it's the db password
+            if (fieldId === 'db-password') {
+                updateDatabasePreview();
+            }
         }
 
         // Generate deployment files
         function generateDeploymentFiles() {
+            console.log('Generate button clicked!');
+            
             // Get all values
             appConfig.appName = document.getElementById('app-name').value || 'dhis2-health';
             appConfig.dhis2Version = document.getElementById('dhis2-version').value;
@@ -791,6 +804,8 @@ docker push <span id="cmd-username-2"></span>/dhis2-custom:latest
             appConfig.dbPassword = document.getElementById('db-password').value;
             appConfig.encryptionKey = document.getElementById('encryption-key').value;
             appConfig.dbInternalUrl = document.getElementById('db-internal-url').value.trim();
+
+            console.log('Config:', appConfig);
 
             // Validate
             if (!appConfig.appName) {
@@ -834,13 +849,14 @@ docker push <span id="cmd-username-2"></span>/dhis2-custom:latest
                 console.error('Error parsing database URL', e);
             }
 
+            console.log('Parsed DB:', parsedDb);
+
             // Update summary
             document.getElementById('summary-app-name').textContent = cleanName;
             document.getElementById('summary-version').textContent = appConfig.dhis2Version;
             document.getElementById('summary-db-name').textContent = appConfig.dbName;
             document.getElementById('summary-url').textContent = `https://${cleanName}.onrender.com`;
             document.getElementById('docker-version-1').textContent = appConfig.dhis2Version;
-            document.getElementById('docker-version-2').textContent = appConfig.dhis2Version;
             document.getElementById('quick-app-name').textContent = cleanName;
             document.getElementById('quick-region').textContent = appConfig.region;
 
@@ -880,10 +896,11 @@ encryption.password = ${appConfig.encryptionKey}`;
 
             // Generate environment variables
             const envVars = [
-                { key: 'DHIS2_DATABASE_HOST', value: appConfig.dbInternalUrl },
-                { key: 'DHIS2_DATABASE_NAME', value: appConfig.dbName },
-                { key: 'DHIS2_DATABASE_USERNAME', value: appConfig.dbUser },
-                { key: 'DHIS2_DATABASE_PASSWORD', value: appConfig.dbPassword, sensitive: true },
+                { key: 'DHIS2_DATABASE_HOST', value: parsedDb.host },
+                { key: 'DHIS2_DATABASE_PORT', value: parsedDb.port },
+                { key: 'DHIS2_DATABASE_NAME', value: parsedDb.database },
+                { key: 'DHIS2_DATABASE_USERNAME', value: parsedDb.username },
+                { key: 'DHIS2_DATABASE_PASSWORD', value: parsedDb.password, sensitive: true },
                 { key: 'DHIS2_ENCRYPTION_KEY', value: appConfig.encryptionKey, sensitive: true },
                 { key: 'DHIS2_SERVER_BASE_URL', value: `https://${cleanName}.onrender.com` },
                 { key: 'DHIS2_SERVER_HTTPS', value: 'on' }
@@ -894,18 +911,20 @@ encryption.password = ${appConfig.encryptionKey}`;
                 <div style="margin-bottom: ${idx < envVars.length - 1 ? '25px' : '0'}; padding-bottom: ${idx < envVars.length - 1 ? '25px' : '0'}; border-bottom: ${idx < envVars.length - 1 ? '1px solid rgba(100, 116, 139, 0.3)' : 'none'};">
                     <div style="margin-bottom: 8px;">
                         <div style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Key</div>
-                        <div style="font-family: 'Courier New', monospace; color: #e2e8f0; font-size: 0.95rem; font-weight: 600; background: rgba(30, 41, 59, 0.6); padding: 10px 12px; border-radius: 6px; border: 1px solid rgba(100, 116, 139, 0.3);">
+                        <div style="font-family: 'Courier New', monospace; color: #e2e8f0; font-size: 0.95rem; font-weight: 600; background: rgba(30, 41, 59, 0.6); padding: 10px 12px; border-radius: 6px; border: 1px solid rgba(100, 116, 139, 0.3); user-select: all; cursor: pointer;" onclick="copyToClipboard('${env.key}')">
                             ${env.key}
                         </div>
                     </div>
                     <div>
                         <div style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Value</div>
-                        <div style="font-family: 'Courier New', monospace; color: ${env.sensitive ? '#22c55e' : '#3b82f6'}; background: ${env.sensitive ? 'rgba(34, 197, 94, 0.1)' : 'rgba(59, 130, 246, 0.1)'}; border: 1px solid ${env.sensitive ? 'rgba(34, 197, 94, 0.3)' : 'rgba(59, 130, 246, 0.3)'}; padding: 10px 12px; border-radius: 6px; word-break: break-all; font-size: 0.9rem; user-select: all;">
+                        <div style="font-family: 'Courier New', monospace; color: ${env.sensitive ? '#22c55e' : '#3b82f6'}; background: ${env.sensitive ? 'rgba(34, 197, 94, 0.1)' : 'rgba(59, 130, 246, 0.1)'}; border: 1px solid ${env.sensitive ? 'rgba(34, 197, 94, 0.3)' : 'rgba(59, 130, 246, 0.3)'}; padding: 10px 12px; border-radius: 6px; word-break: break-all; font-size: 0.9rem; user-select: all; cursor: pointer;" onclick="copyToClipboard('${env.value.replace(/'/g, "\\'")}')">
                             ${env.value}
                         </div>
                     </div>
                 </div>
             `).join('');
+
+            console.log('Files generated successfully');
 
             // Show deployment section
             document.getElementById('step-config').classList.add('step-hidden');
@@ -913,11 +932,26 @@ encryption.password = ${appConfig.encryptionKey}`;
 
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            showToast('Configuration files generated successfully!');
+        }
+
+        // Copy to clipboard helper
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
         }
 
         // Download Dockerfile
         function downloadDockerfile() {
             const content = document.getElementById('dockerfile-content').value;
+            if (!content) {
+                alert('Please generate the configuration files first!');
+                return;
+            }
             const blob = new Blob([content], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -933,6 +967,10 @@ encryption.password = ${appConfig.encryptionKey}`;
         // Download dhis.conf
         function downloadDhisConf() {
             const content = document.getElementById('dhis-conf-content').value;
+            if (!content) {
+                alert('Please generate the configuration files first!');
+                return;
+            }
             const blob = new Blob([content], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -953,6 +991,11 @@ encryption.password = ${appConfig.encryptionKey}`;
 
         // Download docker-compose for local setup
         function downloadDockerCompose() {
+            if (!appConfig.dbPassword || !appConfig.encryptionKey) {
+                alert('Please generate the configuration files first!');
+                return;
+            }
+            
             const cleanName = appConfig.appName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
             
             const dockerCompose = `version: '3.8'
@@ -1127,142 +1170,6 @@ ${dockerCompose}
             } else {
                 personalizedDiv.style.display = 'none';
                 document.getElementById('final-docker-image').textContent = 'yourusername/dhis2-custom:latest';
-            }
-        }
-
-        // File upload handling
-        let uploadedFiles = {
-            dockerfile: null,
-            dhisconf: null
-        };
-
-        function handleFileUpload(inputId, previewId) {
-            const input = document.getElementById(inputId);
-            const file = input.files[0];
-            const statusId = inputId === 'dockerfile-upload' ? 'dockerfile-status' : 'dhisconf-status';
-            const status = document.getElementById(statusId);
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const content = e.target.result;
-                    document.getElementById(previewId).value = content;
-                    
-                    // Store file content
-                    if (inputId === 'dockerfile-upload') {
-                        uploadedFiles.dockerfile = content;
-                    } else {
-                        uploadedFiles.dhisconf = content;
-                    }
-
-                    status.textContent = `✓ ${file.name} uploaded`;
-                    status.style.color = '#22c55e';
-
-                    // Parse and show detected config
-                    if (uploadedFiles.dockerfile && uploadedFiles.dhisconf) {
-                        parseUploadedFiles();
-                        document.getElementById('upload-preview').style.display = 'block';
-                        
-                        // Enable deploy button if API key is present
-                        const apiKey = document.getElementById('render-api-key').value;
-                        if (apiKey) {
-                            document.getElementById('auto-deploy-btn').disabled = false;
-                        }
-                    }
-                };
-                reader.readAsText(file);
-            }
-        }
-
-        function parseUploadedFiles() {
-            const dhisconf = uploadedFiles.dhisconf;
-            const dockerfile = uploadedFiles.dockerfile;
-
-            // Parse dhis.conf
-            const dbNameMatch = dhisconf.match(/connection\.url\s*=\s*jdbc:postgresql:\/\/[^:]+:\d+\/([^\s\n]+)/);
-            const dbUserMatch = dhisconf.match(/connection\.username\s*=\s*([^\s\n]+)/);
-            const serviceUrlMatch = dhisconf.match(/server\.base\.url\s*=\s*([^\s\n]+)/);
-            
-            // Parse Dockerfile for version
-            const versionMatch = dockerfile.match(/FROM\s+dhis2\/core:([^\s\n]+)/);
-
-            // Display detected values
-            document.getElementById('detected-db-name').textContent = dbNameMatch ? dbNameMatch[1] : 'Not found';
-            document.getElementById('detected-db-user').textContent = dbUserMatch ? dbUserMatch[1] : 'Not found';
-            document.getElementById('detected-service-url').textContent = serviceUrlMatch ? serviceUrlMatch[1] : 'Not found';
-            document.getElementById('detected-dhis-version').textContent = versionMatch ? versionMatch[1] : 'Not found';
-        }
-
-        // Auto deploy to Render
-        async function autoDeployToRender() {
-            const apiKey = document.getElementById('render-api-key').value;
-            
-            if (!apiKey) {
-                alert('Please enter your Render API Key');
-                return;
-            }
-
-            if (!uploadedFiles.dockerfile || !uploadedFiles.dhisconf) {
-                alert('Please upload both Dockerfile and dhis.conf');
-                return;
-            }
-
-            const deployBtn = document.getElementById('auto-deploy-btn');
-            const progressDiv = document.getElementById('deployment-progress');
-            const logsDiv = document.getElementById('deployment-logs');
-
-            deployBtn.disabled = true;
-            deployBtn.innerHTML = '<div class="spinner" style="width: 20px; height: 20px; border: 2px solid #ffffff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></div> Deploying...';
-            progressDiv.style.display = 'block';
-            logsDiv.innerHTML = '';
-
-            function addLog(message, type = 'info') {
-                const color = type === 'error' ? '#ef4444' : type === 'success' ? '#22c55e' : '#3b82f6';
-                logsDiv.innerHTML += `<div style="color: ${color}; margin: 5px 0;">${message}</div>`;
-                logsDiv.scrollTop = logsDiv.scrollHeight;
-            }
-
-            try {
-                addLog('🔐 Validating API key...');
-                
-                // Test API key
-                const testResponse = await fetch('https://api.render.com/v1/owners', {
-                    headers: {
-                        'Authorization': `Bearer ${apiKey}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!testResponse.ok) {
-                    throw new Error('Invalid API key. Please check your Render API key.');
-                }
-
-                addLog('✅ API key validated', 'success');
-                addLog('');
-                addLog('⚠️ Unfortunately, automatic deployment requires:', 'error');
-                addLog('  1. A GitHub repository with your Dockerfile and dhis.conf', 'error');
-                addLog('  2. The repository to be connected to Render', 'error');
-                addLog('  3. Render does not support direct file uploads via API', 'error');
-                addLog('');
-                addLog('📚 Alternative Solution:', 'info');
-                addLog('  1. Create a GitHub repository', 'info');
-                addLog('  2. Upload your Dockerfile and dhis.conf to the repo', 'info');
-                addLog('  3. Use Method 3 below to deploy from GitHub', 'info');
-                addLog('');
-                addLog('Or use Method 1 (Environment Variables) - No GitHub needed!', 'success');
-
-            } catch (error) {
-                addLog(`❌ Error: ${error.message}`, 'error');
-            } finally {
-                deployBtn.disabled = false;
-                deployBtn.innerHTML = `
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                    </svg>
-                    <span>Deploy to Render Automatically</span>
-                `;
             }
         }
 
